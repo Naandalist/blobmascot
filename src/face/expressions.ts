@@ -7,16 +7,24 @@ export type FacePose = {
 };
 
 const FACES: Record<BlobExpression, FacePose> = {
-  neutral: { eyeOpen: 1, smile: 0.15, brow: 0 },
-  happy: { eyeOpen: 0.85, smile: 0.8, brow: 0.15 },
-  excited: { eyeOpen: 1.1, smile: 1, brow: 0.25 },
-  sad: { eyeOpen: 0.7, smile: -0.55, brow: -0.35 },
-  angry: { eyeOpen: 0.9, smile: -0.35, brow: -0.55 },
-  curious: { eyeOpen: 1.15, smile: 0.2, brow: 0.2 },
-  proud: { eyeOpen: 0.8, smile: 0.45, brow: 0.1 },
-  shy: { eyeOpen: 0.6, smile: 0.35, brow: 0.05 },
+  neutral: { eyeOpen: 1, smile: 0.12, brow: 0 },
+  happy: { eyeOpen: 0.82, smile: 0.85, brow: 0.18 },
+  excited: { eyeOpen: 1.12, smile: 1, brow: 0.28 },
+  sad: { eyeOpen: 0.68, smile: -0.62, brow: -0.38 },
+  angry: { eyeOpen: 0.88, smile: -0.38, brow: -0.58 },
+  curious: { eyeOpen: 1.16, smile: 0.18, brow: 0.22 },
+  proud: { eyeOpen: 0.8, smile: 0.48, brow: 0.12 },
+  shy: { eyeOpen: 0.58, smile: 0.32, brow: 0.06 },
 };
 
 export function getFace(expression: BlobExpression): FacePose {
-  return FACES[expression];
+  return { ...FACES[expression] };
+}
+
+export function lerpFace(from: FacePose, to: FacePose, t: number): FacePose {
+  return {
+    eyeOpen: from.eyeOpen + (to.eyeOpen - from.eyeOpen) * t,
+    smile: from.smile + (to.smile - from.smile) * t,
+    brow: from.brow + (to.brow - from.brow) * t,
+  };
 }

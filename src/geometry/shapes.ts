@@ -2,45 +2,63 @@ import type { BlobShape } from "../core/types";
 
 export type Point = { x: number; y: number };
 
-const POINT_COUNT = 12;
+export const POINT_COUNT = 16;
 
-function circlePoints(): Point[] {
-  return Array.from({ length: POINT_COUNT }, (_, i) => {
-    const a = (i / POINT_COUNT) * Math.PI * 2 - Math.PI / 2;
-    return { x: Math.cos(a) * 0.72, y: Math.sin(a) * 0.72 };
+function fromRadii(radii: number[]): Point[] {
+  return radii.map((radius, i) => {
+    const angle = (i / POINT_COUNT) * Math.PI * 2 - Math.PI / 2;
+    return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius };
   });
 }
 
-function ripple(base: Point[], amplitudes: number[]): Point[] {
-  return base.map((_p, i) => {
-    const a = (i / POINT_COUNT) * Math.PI * 2 - Math.PI / 2;
-    const r = 0.72 + (amplitudes[i % amplitudes.length] ?? 0);
-    return { x: Math.cos(a) * r, y: Math.sin(a) * r };
-  });
+function fillRadii(pattern: number[]): number[] {
+  return Array.from({ length: POINT_COUNT }, (_, i) => pattern[i % pattern.length] ?? 0.7);
 }
+
+const CIRCLE = fromRadii(Array.from({ length: POINT_COUNT }, () => 0.7));
+
+const PEBBLE = fromRadii([
+  0.66, 0.7, 0.74, 0.77, 0.73, 0.7, 0.67, 0.63, 0.6, 0.63, 0.66, 0.69, 0.71, 0.68, 0.65, 0.64,
+]);
+
+const CLOUD = fromRadii([
+  0.84, 0.73, 0.66, 0.7, 0.64, 0.68, 0.73, 0.63, 0.6, 0.63, 0.72, 0.67, 0.64, 0.7, 0.76, 0.82,
+]);
 
 const SHAPE_POINTS: Record<BlobShape, Point[]> = {
-  circle: circlePoints(),
-  pebble: ripple(circlePoints(), [0.06, -0.04, 0.02, 0.08, -0.05, 0.03]),
-  squircle: ripple(circlePoints(), [0.04, 0.04, -0.02, 0.04, 0.04, -0.02]),
-  capsule: ripple(circlePoints(), [0.1, 0.02, -0.08, 0.02]),
-  triangle: ripple(circlePoints(), [0.16, -0.12, -0.12]),
-  cloud: ripple(circlePoints(), [0.12, -0.02, 0.1, -0.04, 0.14, -0.03]),
-  droplet: ripple(circlePoints(), [0.18, -0.04, -0.06, -0.04]),
-  flame: ripple(circlePoints(), [0.2, -0.08, 0.04, -0.1, 0.12, -0.06]),
-  medal: ripple(circlePoints(), [0.02, 0.08, 0.02, 0.08]),
-  acorn: ripple(circlePoints(), [0.08, 0.02, -0.1, 0.02]),
-  jellyfish: ripple(circlePoints(), [0.1, -0.08, 0.06, -0.08, 0.1, -0.08]),
-  clover: ripple(circlePoints(), [0.14, -0.08, 0.14, -0.08]),
+  circle: CIRCLE,
+  pebble: PEBBLE,
+  squircle: fromRadii(fillRadii([0.74, 0.74, 0.66, 0.74])),
+  capsule: fromRadii(fillRadii([0.78, 0.7, 0.58, 0.7])),
+  triangle: fromRadii(fillRadii([0.86, 0.58, 0.58])),
+  cloud: CLOUD,
+  droplet: fromRadii(fillRadii([0.86, 0.66, 0.58, 0.66])),
+  flame: fromRadii(fillRadii([0.88, 0.6, 0.7, 0.58])),
+  medal: fromRadii(fillRadii([0.7, 0.78])),
+  acorn: fromRadii(fillRadii([0.76, 0.68, 0.58, 0.68])),
+  jellyfish: fromRadii(fillRadii([0.78, 0.6, 0.7, 0.6])),
+  clover: fromRadii(fillRadii([0.82, 0.58, 0.82, 0.58])),
 };
 
 export function getShapePoints(shape: BlobShape): Point[] {
-  return SHAPE_POINTS[shape];
+  return SHAPE_POINTS[shape].map((point) => ({ ...point }));
 }
 
 export function lerpPoints(from: Point[], to: Point[], t: number): Point[] {
-  return from.map((p, i) => ({
-    x: p.x + (to[i].x - p.x) * t,
-    y: p.y + (to[i].y - p.y) * t,
+  return from.map((point, i) => ({
+    x: point.x + (to[i].x - point.x) * t,
+    y: point.y + (to[i].y - point.y) * t,
+  }));
+}
+
+export function toCanvasPoints(
+  points: Point[],
+  cx: number,
+  cy: number,
+  radius: number,
+): Point[] {
+  return points.map((point) => ({
+    x: cx + point.x * radius,
+    y: cy + point.y * radius,
   }));
 }
