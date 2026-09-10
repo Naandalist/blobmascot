@@ -15,8 +15,18 @@ Published on npm. No sprites, no Lottie files, no asset pipeline. Shape, express
 
 [npm](https://www.npmjs.com/package/blobmascot) · [changelog](./CHANGELOG.md) · [source](https://github.com/Naandalist/blobmascot)
 
+## Install
+
 ```bash
 npm install blobmascot
+```
+
+```bash
+yarn add blobmascot
+```
+
+```bash
+pnpm add blobmascot
 ```
 
 Peer dependencies: `react` and `react-dom` 18 or newer.
@@ -266,4 +276,4 @@ git push origin v0.2.0
 
 ## License
 
-MIT
+MIT. Copyright [Listiananda Apriliawan](https://naandalist.com).
