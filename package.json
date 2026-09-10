@@ -1,7 +1,7 @@
 {
   "name": "blobmascot",
-  "version": "0.0.0",
-  "description": "Procedural blob mascot for React — morph, emote, react.",
+  "version": "0.1.1",
+  "description": "Procedural blob mascot for React. Morph, emote, react.",
   "type": "module",
   "license": "MIT",
   "author": "Listiananda Apriliawan",
@@ -13,7 +13,15 @@
     "url": "https://github.com/Naandalist/blobmascot/issues"
   },
   "homepage": "https://github.com/Naandalist/blobmascot#readme",
-  "keywords": ["react", "mascot", "blob", "avatar", "canvas", "chatbot", "animation"],
+  "keywords": [
+    "react",
+    "mascot",
+    "blob",
+    "avatar",
+    "canvas",
+    "chatbot",
+    "animation"
+  ],
   "sideEffects": false,
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -25,10 +33,14 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite --config playground/vite.config.ts",
-    "build": "tsup src/index.ts --dts --format esm,cjs --clean",
+    "build": "tsup",
+    "build:playground": "vite build --config playground/vite.config.ts",
+    "preview": "vite preview --config playground/vite.config.ts",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
