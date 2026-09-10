@@ -37,10 +37,8 @@ Peer dependencies: `react` and `react-dom` 18 or newer.
 - **13 motion states**: idle and thinking loop. wink, alert, exclaim, burst, and comet play once then return to idle.
 - **Gaze** follows the pointer by default, or you drive `yaw` / `pitch` yourself.
 - **Poke** on click. Also available as `controller.poke()`.
-- **PNG export** from any snapshot, any size.
+- **Still export** as PNG or WebP from any snapshot.
 - **TypeScript** types for every public value.
-
-GIF and WebP export come in 0.2.0.
 
 ## Get started
 
@@ -133,16 +131,19 @@ Example: look at an input while it is focused.
 />
 ```
 
-## Rendering to PNG
+## Export PNG or WebP
 
-`exportPng` paints the current snapshot to an offscreen canvas and returns a `Blob`.
+`exportPng` and `exportWebp` paint the current snapshot to an offscreen canvas and return a `Blob`.
 
 ```ts
-import { exportPng } from "blobmascot";
+import { exportPng, exportWebp } from "blobmascot";
 
 const png = await exportPng(mascot.getSnapshot(), 1024);
-const url = URL.createObjectURL(png);
+const webp = await exportWebp(mascot.getSnapshot(), { size: 1024 });
+```
 
+```ts
+const url = URL.createObjectURL(png);
 const anchor = document.createElement("a");
 anchor.href = url;
 anchor.download = "blobmascot.png";
@@ -150,7 +151,7 @@ anchor.click();
 URL.revokeObjectURL(url);
 ```
 
-The second argument is pixel size. Default is `512`. Export uses the snapshot pose, not the live idle wobble, so share cards stay stable.
+Size defaults to `512` for PNG and WebP. Export uses the snapshot pose, not the live idle wobble, so share cards stay stable. There is no GIF export.
 
 ## API reference
 
@@ -214,7 +215,7 @@ Arrays `SHAPES`, `EXPRESSIONS`, `STATES`, and `PALETTE` are exported if you want
 Use `createController` outside React, or share one controller across several trees.
 
 ```ts
-import { createController, BlobMascot, exportPng } from "blobmascot";
+import { createController, BlobMascot, exportPng, exportWebp } from "blobmascot";
 
 const mascot = createController({ shape: "medal", color: "#8B5CF6" });
 
