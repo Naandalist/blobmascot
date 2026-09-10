@@ -26,6 +26,10 @@ export function BlobMascot({
   followCursor = true,
 }: BlobMascotProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const controllerRef = useRef(controller);
+  controllerRef.current = controller;
+  const followRef = useRef(followCursor);
+  followRef.current = followCursor;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -34,13 +38,13 @@ export function BlobMascot({
     if (!ctx) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const runtime = createRuntime(controller.getSnapshot());
+    const runtime = createRuntime(controllerRef.current.getSnapshot());
     let frame = 0;
     let last = performance.now();
     const origin = last;
 
     const tick = (now: number) => {
-      const snapshot = controller.getSnapshot();
+      const snapshot = controllerRef.current.getSnapshot();
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const time = reduced ? 0 : (now - origin) / 1000;
@@ -51,21 +55,18 @@ export function BlobMascot({
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [controller, size]);
+  }, [size]);
 
   useEffect(() => {
-    if (!followCursor) {
-      controller.resetGaze();
-      return;
-    }
-
     const onMove = (event: PointerEvent) => {
+      if (!followRef.current) return;
       const canvas = canvasRef.current;
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
+      if (rect.width < 8 || rect.height < 8) return;
       const dx = (event.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
       const dy = (event.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
-      controller.lookAt({
+      controllerRef.current.lookAt({
         yaw: clamp(dx, -1, 1) * 42,
         pitch: clamp(dy, -1, 1) * 28,
       });
@@ -73,6 +74,10 @@ export function BlobMascot({
 
     window.addEventListener("pointermove", onMove);
     return () => window.removeEventListener("pointermove", onMove);
+  }, []);
+
+  useEffect(() => {
+    if (!followCursor) controller.resetGaze();
   }, [controller, followCursor]);
 
   const snapshot = controller.getSnapshot();
@@ -86,7 +91,6 @@ export function BlobMascot({
       height={size}
       role="img"
       aria-label={aria}
-      style={{ display: "block", width: size, height: size }}
     />
   );
 }

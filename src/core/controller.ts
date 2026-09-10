@@ -67,16 +67,16 @@ export function createController(
       emit();
     },
     lookAt(gaze) {
-      snapshot = {
-        ...snapshot,
-        gaze: {
-          yaw: gaze.yaw ?? snapshot.gaze.yaw,
-          pitch: gaze.pitch ?? snapshot.gaze.pitch,
-        },
+      const next = {
+        yaw: gaze.yaw ?? snapshot.gaze.yaw,
+        pitch: gaze.pitch ?? snapshot.gaze.pitch,
       };
+      if (next.yaw === snapshot.gaze.yaw && next.pitch === snapshot.gaze.pitch) return;
+      snapshot = { ...snapshot, gaze: next };
       emit();
     },
     resetGaze() {
+      if (snapshot.gaze.yaw === 0 && snapshot.gaze.pitch === 0) return;
       snapshot = { ...snapshot, gaze: { yaw: 0, pitch: 0 } };
       emit();
     },

@@ -1,20 +1,25 @@
 import { useMemo, useRef, useSyncExternalStore } from "react";
-import { createController } from "../core/controller";
+import { createController, type BlobMascotController } from "../core/controller";
 import type { BlobMascotOptions, BlobSnapshot } from "../core/types";
 
-export function useBlobMascot(options: BlobMascotOptions = {}) {
+export type UseBlobMascotReturn = BlobMascotController & {
+  snapshot: BlobSnapshot;
+};
+
+export function useBlobMascot(options: BlobMascotOptions = {}): UseBlobMascotReturn {
   const optionsRef = useRef(options);
   optionsRef.current = options;
 
   const controller = useMemo(() => createController(optionsRef.current), []);
 
-  const snapshot: BlobSnapshot = useSyncExternalStore(
+  const snapshot = useSyncExternalStore(
     controller.subscribe,
     controller.getSnapshot,
     controller.getSnapshot,
   );
 
-  return { ...controller, snapshot };
+  return useMemo(
+    () => Object.assign(controller, { snapshot }),
+    [controller, snapshot],
+  );
 }
-
-export type UseBlobMascotReturn = ReturnType<typeof useBlobMascot>;
