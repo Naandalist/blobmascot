@@ -4,7 +4,7 @@ Procedural blob mascot for React. Morph, emote, react.
 
 Published on npm. No sprites, no Lottie files, no asset pipeline. Shape, expression, motion, and gaze are independent axes that lerp on a canvas.
 
-[npm](https://www.npmjs.com/package/blobmascot) · [demo](https://naandalist.github.io/blobmascot/) · [source](https://github.com/Naandalist/blobmascot)
+[npm](https://www.npmjs.com/package/blobmascot) · [demo](https://naandalist.github.io/blobmascot/) · [changelog](./CHANGELOG.md) · [source](https://github.com/Naandalist/blobmascot)
 
 ```bash
 npm install blobmascot
