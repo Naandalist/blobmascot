@@ -2,7 +2,7 @@ import { formatHex, lerpRgb, parseHex, type Rgb } from "./color";
 import { getFace, lerpFace, type FacePose } from "../face/expressions";
 import { getShapePoints, lerpPoints, type Point } from "../geometry/shapes";
 import { sampleMotion, type MotionSample } from "../motion/states";
-import type { BlobSnapshot, Gaze } from "./types";
+import type { BlobSnapshot, BlobState, Gaze } from "./types";
 
 export type VisualFrame = {
   points: Point[];
@@ -10,10 +10,19 @@ export type VisualFrame = {
   color: string;
   gaze: Gaze;
   motion: MotionSample;
+  blink: number;
+  state: BlobState;
 };
 
 function damp(dt: number, speed: number): number {
   return 1 - Math.exp(-speed * dt);
+}
+
+function blinkAmount(phase: number): number {
+  if (phase <= 0 || phase >= 1) return 0;
+  if (phase < 0.35) return phase / 0.35;
+  if (phase < 0.55) return 1;
+  return 1 - (phase - 0.55) / 0.45;
 }
 
 export function createRuntime(initial: BlobSnapshot) {
@@ -21,6 +30,8 @@ export function createRuntime(initial: BlobSnapshot) {
   let face = getFace(initial.expression);
   let rgb: Rgb = parseHex(initial.color);
   let gaze: Gaze = { ...initial.gaze };
+  let nextBlink = 1.6 + Math.random() * 1.4;
+  let blinkStart = -1;
 
   return {
     step(snapshot: BlobSnapshot, dt: number, time: number): VisualFrame {
@@ -33,12 +44,22 @@ export function createRuntime(initial: BlobSnapshot) {
         pitch: gaze.pitch + (snapshot.gaze.pitch - gaze.pitch) * t,
       };
 
+      if (blinkStart < 0 && time >= nextBlink) blinkStart = time;
+      const blink =
+        blinkStart < 0 ? 0 : blinkAmount((time - blinkStart) / 0.14);
+      if (blinkStart >= 0 && time - blinkStart > 0.14) {
+        blinkStart = -1;
+        nextBlink = time + 2.4 + Math.random() * 2.6;
+      }
+
       return {
         points,
         face,
         color: formatHex(rgb),
         gaze,
         motion: sampleMotion(snapshot.state, time),
+        blink,
+        state: snapshot.state,
       };
     },
   };

@@ -12,6 +12,7 @@ export {
   SPIKE_EXPRESSIONS,
   SPIKE_STATES,
   PLAYGROUND_STATES,
+  PALETTE,
 } from "./core/types";
 export type {
   BlobShape,
