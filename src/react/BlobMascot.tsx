@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { drawBlob } from "../render/canvas";
+import { createRuntime } from "../core/runtime";
+import { drawFrame } from "../render/canvas";
 import type { BlobMascotController } from "../core/controller";
 import type { UseBlobMascotReturn } from "./useBlobMascot";
 
@@ -27,23 +28,23 @@ export function BlobMascot({
     if (!ctx) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const runtime = createRuntime(controller.getSnapshot());
     let frame = 0;
-    const start = performance.now();
+    let last = performance.now();
+    const origin = last;
 
     const tick = (now: number) => {
       const snapshot = controller.getSnapshot();
-      const time = reduced ? 0 : (now - start) / 1000;
-      drawBlob(ctx, snapshot, size, time);
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      const time = reduced ? 0 : (now - origin) / 1000;
+      const visual = runtime.step(snapshot, reduced ? 1 : dt, time);
+      drawFrame(ctx, visual, size, time);
       frame = requestAnimationFrame(tick);
     };
 
     frame = requestAnimationFrame(tick);
-    const unsub = controller.subscribe(() => {});
-
-    return () => {
-      cancelAnimationFrame(frame);
-      unsub();
-    };
+    return () => cancelAnimationFrame(frame);
   }, [controller, size]);
 
   const snapshot = controller.getSnapshot();

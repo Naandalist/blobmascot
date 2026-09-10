@@ -8,14 +8,14 @@
 - [x] `package.json` name `blobmascot`, peer React
 - [x] README + MIT
 
-## B. Fase 0 — spike
-- [ ] Path 3 shape dengan titik sama: circle, pebble, cloud
-- [ ] Lerp morph antar shape
-- [ ] 3 muka: neutral, happy, sad
-- [ ] State idle + thinking
-- [ ] Gaze kiri/kanan
-- [ ] Playground terasa “lembek”
-- [ ] ~60fps satu instance
+## B. Fase 0 spike
+- [x] Path 3 shape dengan titik sama: circle, pebble, cloud
+- [x] Lerp morph antar shape
+- [x] 3 muka: neutral, happy, sad
+- [x] State idle + thinking
+- [x] Gaze kiri/kanan
+- [ ] Playground terasa lembek (review di PR)
+- [ ] ~60fps satu instance (review di PR)
 
-## C–G
+## C-G
 Lihat percakapan plan. Jangan mulai 0.1.0 sebelum spike lolos.

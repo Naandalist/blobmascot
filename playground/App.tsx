@@ -1,8 +1,8 @@
 import {
   BlobMascot,
-  EXPRESSIONS,
-  SHAPES,
-  STATES,
+  SPIKE_EXPRESSIONS,
+  SPIKE_SHAPES,
+  SPIKE_STATES,
   useBlobMascot,
   exportPng,
 } from "../src";
@@ -10,7 +10,7 @@ import {
 export function App() {
   const mascot = useBlobMascot({
     shape: "cloud",
-    expression: "curious",
+    expression: "happy",
     state: "idle",
     color: "#4F8EF7",
   });
@@ -28,10 +28,10 @@ export function App() {
   return (
     <main className="page">
       <h1>blobmascot</h1>
-      <p className="lead">Procedural blob mascot — morph, emote, react.</p>
+      <p className="lead">Fase 0 spike: morph circle / pebble / cloud, then change the face.</p>
       <div className="stage">
         <div className="canvas-wrap">
-          <BlobMascot controller={mascot} size={208} />
+          <BlobMascot controller={mascot} size={240} />
         </div>
         <div className="controls">
           <label>
@@ -40,7 +40,7 @@ export function App() {
               value={mascot.snapshot.shape}
               onChange={(e) => mascot.setShape(e.target.value as typeof mascot.snapshot.shape)}
             >
-              {SHAPES.map((shape) => (
+              {SPIKE_SHAPES.map((shape) => (
                 <option key={shape}>{shape}</option>
               ))}
             </select>
@@ -53,7 +53,7 @@ export function App() {
                 mascot.setExpression(e.target.value as typeof mascot.snapshot.expression)
               }
             >
-              {EXPRESSIONS.map((expression) => (
+              {SPIKE_EXPRESSIONS.map((expression) => (
                 <option key={expression}>{expression}</option>
               ))}
             </select>
@@ -64,7 +64,7 @@ export function App() {
               value={mascot.snapshot.state}
               onChange={(e) => mascot.setState(e.target.value as typeof mascot.snapshot.state)}
             >
-              {STATES.map((state) => (
+              {SPIKE_STATES.map((state) => (
                 <option key={state}>{state}</option>
               ))}
             </select>
@@ -78,13 +78,13 @@ export function App() {
             />
           </label>
           <div className="row">
-            <button type="button" onClick={() => mascot.lookAt({ yaw: -25, pitch: 8 })}>
+            <button type="button" onClick={() => mascot.lookAt({ yaw: -40, pitch: 6 })}>
               Look left
             </button>
             <button type="button" onClick={() => mascot.resetGaze()}>
               Center
             </button>
-            <button type="button" onClick={() => mascot.lookAt({ yaw: 25, pitch: 8 })}>
+            <button type="button" onClick={() => mascot.lookAt({ yaw: 40, pitch: 6 })}>
               Look right
             </button>
           </div>
