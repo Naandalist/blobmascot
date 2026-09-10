@@ -57,6 +57,8 @@ body,
   grid-template-columns: 1fr 320px;
   height: 100dvh;
   overflow: hidden;
+  color: var(--text);
+  background: var(--dock);
 }
 
 .stage {
@@ -144,6 +146,7 @@ body,
 
 .dock {
   background: var(--dock);
+  color: var(--text);
   border-left: 1px solid var(--line);
   padding: 22px 18px 40px;
   overflow-x: hidden;
@@ -155,6 +158,7 @@ h2 {
   margin: 0 0 12px;
   font-size: 14px;
   font-weight: 700;
+  color: var(--text);
 }
 
 .dock h2:not(:first-child) {
@@ -222,6 +226,7 @@ h2 {
   justify-content: space-between;
   font-size: 14px;
   font-weight: 600;
+  color: var(--text);
 }
 
 .switch {
@@ -244,6 +249,14 @@ h2 {
 
 .switch.on {
   background: #111;
+}
+
+[data-theme="dark"] .switch.on {
+  background: #f3eef8;
+}
+
+[data-theme="dark"] .switch.on span {
+  background: #16141c;
 }
 
 .switch.on span {
