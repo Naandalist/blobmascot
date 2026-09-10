@@ -25,6 +25,6 @@
 - [x] npm publish via OIDC (`publish.yml`)
 
 ## D. 0.2.0
-- [ ] GIF / WebP export
-- [ ] CSS theme / skin
-- [ ] Multi instance perf
+- [x] GIF / WebP export
+- [x] CSS theme / skin
+- [x] Multi instance pointer sharing
