@@ -11,14 +11,13 @@ Versioning follows [SemVer](https://semver.org/).
 
 ### Added
 
-- `exportGif()` animated loop of the current pose
 - `exportWebp()` still export
 - Playground theme skins: lavender, light, dark
 - Shared pointer listener so many mascots do not each bind `pointermove`
 
 ### Notes
 
-- Animated WebP is not in this release. GIF carries the motion.
+- Still exports are PNG and WebP. There is no GIF export.
 - Tag `v0.2.0` after merge to publish with OIDC.
 
 ## [0.1.1] - 2026-09-10
@@ -43,7 +42,6 @@ First public release on [npm](https://www.npmjs.com/package/blobmascot).
 
 - Package is unscoped: `npm install blobmascot`
 - Peer dependencies: `react`, `react-dom` >= 18
-- GIF / WebP export is not in this release
 
 [Unreleased]: https://github.com/Naandalist/blobmascot/compare/v0.2.0...HEAD
 [0.2.0]: https://github.com/Naandalist/blobmascot/releases/tag/v0.2.0
