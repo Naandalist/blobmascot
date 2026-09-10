@@ -4,6 +4,8 @@ export { useBlobMascot } from "./react/useBlobMascot";
 export { createController } from "./core/controller";
 export type { BlobMascotController } from "./core/controller";
 export { exportPng } from "./export/png";
+export { exportWebp } from "./export/webp";
+export type { ExportOptions } from "./export/options";
 export {
   SHAPES,
   EXPRESSIONS,

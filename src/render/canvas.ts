@@ -2,6 +2,7 @@ import { SHAPE_FACE, toCanvasPoints, type Point } from "../geometry/shapes";
 import { eyePoses, getLiveliness } from "../face/gaze";
 import type { VisualFrame } from "../core/runtime";
 import type { BlobSnapshot } from "../core/types";
+import { contrastInk } from "../core/color";
 import { createRuntime } from "../core/runtime";
 
 function clamp(value: number, min: number, max: number) {
@@ -50,12 +51,13 @@ function drawEye(
   height: number,
   rotate: number,
   kind: number,
+  ink: string,
 ) {
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(rotate);
-  ctx.fillStyle = "#fff";
-  ctx.strokeStyle = "#fff";
+  ctx.fillStyle = ink;
+  ctx.strokeStyle = ink;
   ctx.lineCap = "round";
 
   if (kind > 1.4) {
@@ -149,6 +151,7 @@ export function drawFrame(
   const leftBlink = canBlink ? Math.max(frame.blink, wink) : 0;
   const rightBlink = canBlink ? frame.blink : 0;
   const pad = faceR * 0.32;
+  const ink = contrastInk(frame.color);
 
   const drawOne = (pose: (typeof poses)[0], blink: number, sign: number) => {
     const depth = Math.max(0.22, pose.depth);
@@ -159,7 +162,7 @@ export function drawFrame(
     const y = clamp(faceY + pose.y, faceY - faceR + pad, faceY + faceR - pad);
     const basisRot = Math.atan2(pose.dx, pose.dy);
     const rot = basisRot + frame.face.rotate * sign;
-    drawEye(ctx, x, y, w, h, rot, frame.face.kind);
+    drawEye(ctx, x, y, w, h, rot, frame.face.kind, ink);
   };
 
   drawOne(poses[0], leftBlink, -1);
@@ -172,12 +175,12 @@ export function drawFrame(
     const ring = radius * 0.96;
     ctx.beginPath();
     ctx.arc(cx + Math.cos(angle) * ring, cy + Math.sin(angle) * ring, radius * 0.14, 0, Math.PI * 2);
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = ink;
     ctx.fill();
   }
 
   if (frame.state === "burst") {
-    ctx.strokeStyle = "rgba(255,255,255,0.7)";
+    ctx.strokeStyle = ink;
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.arc(cx, cy, radius * (1.08 + (time % 0.6) * 0.35), 0, Math.PI * 2);

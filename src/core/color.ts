@@ -17,6 +17,14 @@ export function formatHex(rgb: Rgb): string {
   return `#${to(rgb.r)}${to(rgb.g)}${to(rgb.b)}`;
 }
 
+export function luminance(rgb: Rgb): number {
+  return (0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b) / 255;
+}
+
+export function contrastInk(color: string): string {
+  return luminance(parseHex(color)) > 0.62 ? "#111111" : "#ffffff";
+}
+
 export function lerpRgb(from: Rgb, to: Rgb, t: number): Rgb {
   return {
     r: from.r + (to.r - from.r) * t,

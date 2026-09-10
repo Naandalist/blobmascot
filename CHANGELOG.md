@@ -7,11 +7,18 @@ Versioning follows [SemVer](https://semver.org/).
 
 ## [Unreleased]
 
-### Planned
+## [0.2.0] - 2026-09-10
 
-- GIF and WebP export
-- CSS theme / skin
-- Multi instance performance pass
+### Added
+
+- `exportWebp()` still export
+- Playground theme skins: lavender, light, dark
+- Shared pointer listener so many mascots do not each bind `pointermove`
+
+### Notes
+
+- Still exports are PNG and WebP. There is no GIF export.
+- Tag `v0.2.0` after merge to publish with OIDC.
 
 ## [0.1.1] - 2026-09-10
 
@@ -35,7 +42,7 @@ First public release on [npm](https://www.npmjs.com/package/blobmascot).
 
 - Package is unscoped: `npm install blobmascot`
 - Peer dependencies: `react`, `react-dom` >= 18
-- GIF / WebP export is not in this release
 
-[Unreleased]: https://github.com/Naandalist/blobmascot/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/Naandalist/blobmascot/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Naandalist/blobmascot/releases/tag/v0.2.0
 [0.1.1]: https://github.com/Naandalist/blobmascot/releases/tag/v0.1.1

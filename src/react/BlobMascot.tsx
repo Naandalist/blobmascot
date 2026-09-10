@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { createRuntime } from "../core/runtime";
 import { drawFrame } from "../render/canvas";
+import { subscribePointer } from "./pointer";
 import type { BlobMascotController } from "../core/controller";
 import type { UseBlobMascotReturn } from "./useBlobMascot";
 
@@ -13,10 +14,6 @@ export type BlobMascotProps = {
   label?: string;
   followCursor?: boolean;
 };
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
 
 export function BlobMascot({
   controller,
@@ -58,22 +55,12 @@ export function BlobMascot({
   }, [size]);
 
   useEffect(() => {
-    const onMove = (event: PointerEvent) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    return subscribePointer(canvas, (gaze) => {
       if (!followRef.current) return;
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      if (rect.width < 8 || rect.height < 8) return;
-      const dx = (event.clientX - (rect.left + rect.width / 2)) / (window.innerWidth * 0.32);
-      const dy = (event.clientY - (rect.top + rect.height / 2)) / (window.innerHeight * 0.32);
-      controllerRef.current.lookAt({
-        yaw: clamp(dx, -1, 1) * 36,
-        pitch: clamp(dy, -1, 1) * -28,
-      });
-    };
-
-    window.addEventListener("pointermove", onMove);
-    return () => window.removeEventListener("pointermove", onMove);
+      controllerRef.current.lookAt(gaze);
+    });
   }, []);
 
   useEffect(() => {
