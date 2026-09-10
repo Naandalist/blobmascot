@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   BlobMascot,
   EXPRESSIONS,
@@ -13,18 +13,36 @@ import {
 import { MiniBlob } from "./MiniBlob";
 
 type Theme = "lavender" | "light" | "dark";
+type ExportKind = "png" | "gif" | "webp";
+
+const DARK_BODY = "#ffffff";
+const LIGHT_BODY = "#111111";
 
 export function App() {
   const [followCursor, setFollowCursor] = useState(true);
   const [theme, setTheme] = useState<Theme>("lavender");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const mascot = useBlobMascot({
     shape: "circle",
     expression: "surprised",
     state: "idle",
-    color: "#111111",
+    color: LIGHT_BODY,
   });
 
-  async function download(kind: "png" | "gif" | "webp") {
+  function applyTheme(next: Theme) {
+    const current = mascot.getSnapshot().color.toLowerCase();
+    setTheme(next);
+    if (next === "dark" && current === LIGHT_BODY) {
+      mascot.setColor(DARK_BODY);
+    }
+    if (next !== "dark" && current === DARK_BODY) {
+      mascot.setColor(LIGHT_BODY);
+    }
+  }
+
+  async function download(kind: ExportKind) {
+    setMenuOpen(false);
     const snapshot = mascot.getSnapshot();
     const blob =
       kind === "gif"
@@ -40,20 +58,53 @@ export function App() {
     URL.revokeObjectURL(url);
   }
 
+  useEffect(() => {
+    const onPointer = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener("pointerdown", onPointer);
+    return () => window.removeEventListener("pointerdown", onPointer);
+  }, []);
+
   return (
     <div className="app" data-theme={theme}>
       <section className="stage">
         <BlobMascot controller={mascot} size={720} followCursor={followCursor} />
-        <div className="exports">
-          <button className="export" type="button" onClick={() => download("png")}>
-            Export PNG
+        <div className="exports" ref={menuRef}>
+          <button
+            className="export"
+            type="button"
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            Export
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M6 9l6 6 6-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </button>
-          <button className="export" type="button" onClick={() => download("gif")}>
-            Export GIF
-          </button>
-          <button className="export" type="button" onClick={() => download("webp")}>
-            Export WebP
-          </button>
+          {menuOpen ? (
+            <div className="export-list" role="menu">
+              <button type="button" role="menuitem" onClick={() => download("png")}>
+                PNG
+              </button>
+              <button type="button" role="menuitem" onClick={() => download("gif")}>
+                GIF
+              </button>
+              <button type="button" role="menuitem" onClick={() => download("webp")}>
+                WebP
+              </button>
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -124,7 +175,7 @@ export function App() {
               key={value}
               type="button"
               className={theme === value ? "theme on" : "theme"}
-              onClick={() => setTheme(value)}
+              onClick={() => applyTheme(value)}
             >
               {label(value)}
             </button>
