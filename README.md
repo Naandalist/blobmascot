@@ -4,7 +4,7 @@ Procedural blob mascot for React. Morph, emote, react.
 
 Live canvas character. Shape, expression, and motion are independent axes. PNG export is included. GIF/WebP come later.
 
-Inspired by the idea behind [`reactive_bloub`](https://pub.dev/packages/reactive_bloub) (Flutter). This is an original rewrite, not a port of that source.
+Inspired by the idea behind [`reactive_bloub`](https://pub.dev/packages/reactive_bloub) (Flutter).
 
 ## Status
 
