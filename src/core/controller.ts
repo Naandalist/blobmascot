@@ -26,7 +26,7 @@ export function createController(
     shape: options.shape ?? "circle",
     expression: options.expression ?? "neutral",
     state: options.state ?? "idle",
-    color: options.color ?? "#4F8EF7",
+    color: options.color ?? "#111111",
     gaze: { yaw: 0, pitch: 0 },
   };
 

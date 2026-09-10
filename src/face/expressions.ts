@@ -1,20 +1,31 @@
 import type { BlobExpression } from "../core/types";
 
 export type FacePose = {
-  eyeOpen: number;
-  smile: number;
-  brow: number;
+  width: number;
+  height: number;
+  spread: number;
+  y: number;
+  rotate: number;
+  kind: number;
 };
 
+const OVAL = 0;
+const ARC = 1;
+const LINE = 2;
+
 const FACES: Record<BlobExpression, FacePose> = {
-  neutral: { eyeOpen: 1, smile: 0.12, brow: 0 },
-  happy: { eyeOpen: 0.82, smile: 0.85, brow: 0.18 },
-  excited: { eyeOpen: 1.12, smile: 1, brow: 0.28 },
-  sad: { eyeOpen: 0.68, smile: -0.62, brow: -0.38 },
-  angry: { eyeOpen: 0.88, smile: -0.38, brow: -0.58 },
-  curious: { eyeOpen: 1.16, smile: 0.18, brow: 0.22 },
-  proud: { eyeOpen: 0.8, smile: 0.48, brow: 0.12 },
-  shy: { eyeOpen: 0.58, smile: 0.32, brow: 0.06 },
+  neutral: { width: 0.07, height: 0.028, spread: 0.16, y: -0.16, rotate: -0.45, kind: OVAL },
+  attentive: { width: 0.09, height: 0.12, spread: 0.18, y: -0.04, rotate: 0, kind: OVAL },
+  surprised: { width: 0.145, height: 0.17, spread: 0.2, y: -0.02, rotate: 0, kind: OVAL },
+  excited: { width: 0.16, height: 0.18, spread: 0.19, y: -0.04, rotate: 0, kind: OVAL },
+  happy: { width: 0.11, height: 0.08, spread: 0.2, y: -0.02, rotate: 0.15, kind: ARC },
+  angry: { width: 0.1, height: 0.08, spread: 0.2, y: -0.06, rotate: 0.45, kind: OVAL },
+  sad: { width: 0.045, height: 0.05, spread: 0.16, y: 0.02, rotate: 0, kind: OVAL },
+  suspicious: { width: 0.07, height: 0.05, spread: 0.18, y: -0.02, rotate: 0.2, kind: OVAL },
+  curious: { width: 0.05, height: 0.07, spread: 0.14, y: -0.08, rotate: 0.35, kind: OVAL },
+  proud: { width: 0.055, height: 0.12, spread: 0.16, y: -0.04, rotate: 0, kind: OVAL },
+  shy: { width: 0.04, height: 0.045, spread: 0.14, y: 0.02, rotate: 0, kind: OVAL },
+  unimpressed: { width: 0.09, height: 0.018, spread: 0.16, y: -0.02, rotate: 0, kind: LINE },
 };
 
 export function getFace(expression: BlobExpression): FacePose {
@@ -23,8 +34,15 @@ export function getFace(expression: BlobExpression): FacePose {
 
 export function lerpFace(from: FacePose, to: FacePose, t: number): FacePose {
   return {
-    eyeOpen: from.eyeOpen + (to.eyeOpen - from.eyeOpen) * t,
-    smile: from.smile + (to.smile - from.smile) * t,
-    brow: from.brow + (to.brow - from.brow) * t,
+    width: from.width + (to.width - from.width) * t,
+    height: from.height + (to.height - from.height) * t,
+    spread: from.spread + (to.spread - from.spread) * t,
+    y: from.y + (to.y - from.y) * t,
+    rotate: from.rotate + (to.rotate - from.rotate) * t,
+    kind: from.kind + (to.kind - from.kind) * t,
   };
 }
+
+export const EYE_OVAL = OVAL;
+export const EYE_ARC = ARC;
+export const EYE_LINE = LINE;
