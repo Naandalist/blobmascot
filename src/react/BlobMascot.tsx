@@ -67,8 +67,8 @@ export function BlobMascot({
       const dx = (event.clientX - (rect.left + rect.width / 2)) / (window.innerWidth * 0.32);
       const dy = (event.clientY - (rect.top + rect.height / 2)) / (window.innerHeight * 0.32);
       controllerRef.current.lookAt({
-        yaw: clamp(dx, -1, 1) * 80,
-        pitch: clamp(dy, -1, 1) * 64,
+        yaw: clamp(dx, -1, 1) * 36,
+        pitch: clamp(dy, -1, 1) * -28,
       });
     };
 

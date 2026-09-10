@@ -108,7 +108,7 @@ export function drawFrame(
 
   ctx.save();
   ctx.translate(cx + life.driftX * radius, cy + life.driftY * radius);
-  ctx.rotate(frame.motion.tilt + turnX * 0.12 + rad(roll) * 0.35);
+  ctx.rotate(frame.motion.tilt + turnX * 0.07 + rad(roll) * 0.2);
   ctx.translate(-cx, -cy);
 
   smoothPath(ctx, points);
@@ -137,12 +137,18 @@ export function drawFrame(
   const faceR = radius * fit.scale;
   const faceY = cy + fit.y * radius + frame.face.y * faceR;
   const split = Math.max(8, frame.face.spread * 72);
-  const poses = eyePoses(yaw * 0.85, pitch * 0.85, roll, faceR, split);
+  const poses = eyePoses(
+    Math.max(-32, Math.min(32, yaw)),
+    Math.max(-24, Math.min(24, pitch)),
+    Math.max(-8, Math.min(8, roll)),
+    faceR,
+    split,
+  );
   const canBlink = frame.face.kind < 0.55 && frame.state !== "sleep";
   const wink = frame.state === "wink" ? 1 : 0;
   const leftBlink = canBlink ? Math.max(frame.blink, wink) : 0;
   const rightBlink = canBlink ? frame.blink : 0;
-  const pad = faceR * 0.22;
+  const pad = faceR * 0.32;
 
   const drawOne = (pose: (typeof poses)[0], blink: number, sign: number) => {
     const depth = Math.max(0.22, pose.depth);
