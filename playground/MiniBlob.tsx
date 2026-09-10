@@ -6,6 +6,7 @@ type MiniBlobProps = {
   shape: BlobShape;
   expression: BlobExpression;
   state?: BlobState;
+  color?: string;
   size?: number;
 };
 
@@ -13,6 +14,7 @@ export function MiniBlob({
   shape,
   expression,
   state = "idle",
+  color = "#111111",
   size = 52,
 }: MiniBlobProps) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -27,13 +29,13 @@ export function MiniBlob({
         shape,
         expression,
         state,
-        color: "#111111",
+        color,
         gaze: { yaw: 0, pitch: 0 },
       },
       size,
       0,
     );
-  }, [shape, expression, state, size]);
+  }, [shape, expression, state, color, size]);
 
   return <canvas ref={ref} width={size} height={size} aria-hidden="true" />;
 }

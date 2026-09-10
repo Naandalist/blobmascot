@@ -41,5 +41,8 @@ export async function exportGif(
   }
 
   gif.finish();
-  return new Blob([gif.bytes()], { type: "image/gif" });
+  const bytes = gif.bytes();
+  const copy = new Uint8Array(bytes.byteLength);
+  copy.set(bytes);
+  return new Blob([copy.buffer], { type: "image/gif" });
 }
