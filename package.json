@@ -1,6 +1,6 @@
 {
   "name": "blobmascot",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Interactive blob mascot for React apps. Shape, expression, and gaze update live on canvas.",
   "type": "module",
   "license": "MIT",
@@ -56,6 +56,9 @@
     "build:playground": "vite build --config playground/vite.config.ts",
     "preview": "vite preview --config playground/vite.config.ts",
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "gifenc": "^1.0.3"
   },
   "peerDependencies": {
     "react": ">=18",
