@@ -91,6 +91,8 @@ export function BlobMascot({
       height={size}
       role="img"
       aria-label={aria}
+      onClick={() => controllerRef.current.poke()}
+      style={{ cursor: "pointer" }}
     />
   );
 }

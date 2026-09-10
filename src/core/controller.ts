@@ -17,6 +17,7 @@ export type BlobMascotController = {
   setColor(color: string): void;
   lookAt(gaze: Partial<Gaze>): void;
   resetGaze(): void;
+  poke(): void;
 };
 
 export function createController(
@@ -79,6 +80,16 @@ export function createController(
       if (snapshot.gaze.yaw === 0 && snapshot.gaze.pitch === 0) return;
       snapshot = { ...snapshot, gaze: { yaw: 0, pitch: 0 } };
       emit();
+    },
+    poke() {
+      snapshot = { ...snapshot, state: "burst" };
+      emit();
+      window.setTimeout(() => {
+        if (snapshot.state === "burst") {
+          snapshot = { ...snapshot, state: "idle" };
+          emit();
+        }
+      }, 900);
     },
   };
 }
