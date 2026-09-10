@@ -1,3 +1,7 @@
+export const SPIKE_SHAPES = ["circle", "pebble", "cloud"] as const;
+export const SPIKE_EXPRESSIONS = ["neutral", "happy", "sad"] as const;
+export const SPIKE_STATES = ["idle", "thinking"] as const;
+
 export const SHAPES = [
   "circle",
   "pebble",
