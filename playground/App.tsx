@@ -32,7 +32,7 @@ export function App() {
   return (
     <div className="app">
       <section className="stage">
-        <BlobMascot controller={mascot} size={420} followCursor={followCursor} />
+        <BlobMascot controller={mascot} size={720} followCursor={followCursor} />
         <button className="export" type="button" onClick={downloadPng}>
           Export as PNG
         </button>

@@ -12,12 +12,14 @@ body,
 #root {
   margin: 0;
   height: 100%;
+  overflow: hidden;
 }
 
 .app {
   display: grid;
   grid-template-columns: 1fr 320px;
-  min-height: 100%;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 .stage {
@@ -25,11 +27,14 @@ body,
   display: grid;
   place-items: center;
   background: #f6f0fa;
+  overflow: hidden;
+  min-width: 0;
+  height: 100dvh;
 }
 
 .stage canvas {
-  width: min(72vw, 420px);
-  height: min(72vw, 420px);
+  width: min(78vmin, 720px);
+  height: min(78vmin, 720px);
 }
 
 .export {
@@ -44,13 +49,16 @@ body,
   padding: 10px 16px;
   border-radius: 999px;
   cursor: pointer;
+  z-index: 2;
 }
 
 .dock {
   background: #fff;
   border-left: 1px solid #eeeaf2;
   padding: 22px 18px 40px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100dvh;
 }
 
 h2 {
@@ -161,14 +169,16 @@ h2 {
 @media (max-width: 860px) {
   .app {
     grid-template-columns: 1fr;
+    grid-template-rows: 62dvh 38dvh;
+  }
+
+  .stage,
+  .dock {
+    height: auto;
   }
 
   .dock {
     border-left: 0;
     border-top: 1px solid #eeeaf2;
-  }
-
-  .stage {
-    min-height: 70vh;
   }
 }
