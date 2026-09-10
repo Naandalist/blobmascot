@@ -29,6 +29,7 @@ export function App() {
     state: "idle",
     color: LIGHT_BODY,
   });
+  const previewColor = theme === "dark" ? DARK_BODY : LIGHT_BODY;
 
   function applyTheme(next: Theme) {
     const current = mascot.getSnapshot().color.toLowerCase();
@@ -118,7 +119,7 @@ export function App() {
               className={mascot.snapshot.shape === shape ? "cell on" : "cell"}
               onClick={() => mascot.setShape(shape)}
             >
-              <MiniBlob shape={shape} expression="surprised" />
+              <MiniBlob shape={shape} expression="surprised" color={previewColor} />
               <span>{label(shape)}</span>
             </button>
           ))}
@@ -133,7 +134,7 @@ export function App() {
               className={mascot.snapshot.expression === expression ? "cell on" : "cell"}
               onClick={() => mascot.setExpression(expression)}
             >
-              <MiniBlob shape="circle" expression={expression} />
+              <MiniBlob shape="circle" expression={expression} color={previewColor} />
               <span>{label(expression)}</span>
             </button>
           ))}
@@ -148,7 +149,7 @@ export function App() {
               className={mascot.snapshot.state === state ? "cell on" : "cell"}
               onClick={() => mascot.setState(state)}
             >
-              <MiniBlob shape="circle" expression="surprised" state={state} />
+              <MiniBlob shape="circle" expression="surprised" state={state} color={previewColor} />
               <span>{label(state)}</span>
             </button>
           ))}
