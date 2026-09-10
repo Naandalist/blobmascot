@@ -2,7 +2,7 @@ import { formatHex, lerpRgb, parseHex, type Rgb } from "./color";
 import { getFace, lerpFace, type FacePose } from "../face/expressions";
 import { getShapePoints, lerpPoints, type Point } from "../geometry/shapes";
 import { sampleMotion, type MotionSample } from "../motion/states";
-import type { BlobSnapshot, BlobState, Gaze } from "./types";
+import type { BlobShape, BlobSnapshot, BlobState, Gaze } from "./types";
 
 export type VisualFrame = {
   points: Point[];
@@ -12,6 +12,7 @@ export type VisualFrame = {
   motion: MotionSample;
   blink: number;
   state: BlobState;
+  shape: BlobShape;
 };
 
 function damp(dt: number, speed: number): number {
@@ -61,6 +62,7 @@ export function createRuntime(initial: BlobSnapshot) {
         motion: sampleMotion(snapshot.state, time),
         blink,
         state: snapshot.state,
+        shape: snapshot.shape,
       };
     },
   };

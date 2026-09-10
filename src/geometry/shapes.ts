@@ -62,43 +62,63 @@ function stadium(halfW: number, halfH: number): Point[] {
   });
 }
 
+export type ShapeFace = {
+  y: number;
+  scale: number;
+};
+
+export const SHAPE_FACE: Record<BlobShape, ShapeFace> = {
+  circle: { y: 0, scale: 1 },
+  pebble: { y: 0, scale: 0.96 },
+  squircle: { y: 0, scale: 0.96 },
+  capsule: { y: 0, scale: 0.78 },
+  triangle: { y: 0.14, scale: 0.62 },
+  cloud: { y: 0.02, scale: 0.8 },
+  droplet: { y: 0.18, scale: 0.68 },
+  flame: { y: 0.16, scale: 0.64 },
+  medal: { y: -0.2, scale: 0.62 },
+  acorn: { y: -0.06, scale: 0.78 },
+  jellyfish: { y: -0.24, scale: 0.58 },
+  clover: { y: 0, scale: 0.6 },
+};
+
 const SHAPE_POINTS: Record<BlobShape, Point[]> = {
   circle: polar(() => 0.78),
-  pebble: polar((angle) => 0.72 + 0.07 * Math.sin(2 * angle + 0.5) + 0.05 * Math.sin(3 * angle + 1.1) + 0.03 * Math.cos(angle - 0.4)),
+  pebble: polar((angle) => 0.74 + 0.08 * Math.sin(2 * angle + 0.5) + 0.05 * Math.sin(3 * angle + 1.1) + 0.03 * Math.cos(angle - 0.4)),
   squircle: superellipse(5.2, 0.78, 0.78),
-  capsule: stadium(0.92, 0.5),
-  triangle: roundedPolygon(3, 0.82, 0.42),
+  capsule: stadium(0.92, 0.54),
+  triangle: roundedPolygon(3, 0.9, 0.5),
   cloud: unionCircles([
-    { x: -0.34, y: 0.04, r: 0.4 },
-    { x: 0.02, y: -0.26, r: 0.46 },
-    { x: 0.36, y: 0.02, r: 0.4 },
-    { x: -0.02, y: 0.26, r: 0.42 },
+    { x: -0.32, y: 0.06, r: 0.5 },
+    { x: 0.02, y: -0.22, r: 0.54 },
+    { x: 0.34, y: 0.06, r: 0.5 },
+    { x: 0, y: 0.24, r: 0.5 },
   ]),
   droplet: polar((angle) => {
     const tip = Math.max(0, 0.5 + 0.5 * Math.sin(angle));
-    return 0.2 + 0.52 * Math.pow(tip, 1.12);
+    return 0.32 + 0.5 * Math.pow(tip, 1.05);
   }),
   flame: polar((angle) => {
-    const lean = angle - 0.28;
+    const lean = angle - 0.22;
     const tip = Math.max(0, 0.5 + 0.5 * Math.sin(lean));
-    return 0.22 + 0.5 * Math.pow(tip, 1.18) + 0.03 * Math.sin(2 * lean);
+    return 0.32 + 0.5 * Math.pow(tip, 1.08) + 0.03 * Math.sin(2 * lean);
   }),
   medal: unionCircles([
-    { x: 0, y: -0.16, r: 0.58 },
-    { x: -0.26, y: 0.46, r: 0.3 },
-    { x: 0.26, y: 0.46, r: 0.3 },
+    { x: 0, y: -0.14, r: 0.64 },
+    { x: -0.28, y: 0.48, r: 0.34 },
+    { x: 0.28, y: 0.48, r: 0.34 },
   ]),
-  acorn: polar((angle) => 0.62 + 0.16 * Math.sin(angle) + 0.04 * Math.cos(2 * angle)),
+  acorn: polar((angle) => 0.68 + 0.14 * Math.sin(angle) + 0.03 * Math.cos(2 * angle)),
   jellyfish: unionCircles([
-    { x: 0, y: -0.2, r: 0.56 },
-    { x: -0.22, y: 0.5, r: 0.26 },
-    { x: 0.22, y: 0.5, r: 0.26 },
+    { x: 0, y: -0.16, r: 0.62 },
+    { x: -0.24, y: 0.5, r: 0.3 },
+    { x: 0.24, y: 0.5, r: 0.3 },
   ]),
   clover: unionCircles([
-    { x: 0, y: -0.34, r: 0.4 },
-    { x: 0.34, y: 0, r: 0.4 },
-    { x: 0, y: 0.34, r: 0.4 },
-    { x: -0.34, y: 0, r: 0.4 },
+    { x: 0, y: -0.28, r: 0.48 },
+    { x: 0.28, y: 0, r: 0.48 },
+    { x: 0, y: 0.28, r: 0.48 },
+    { x: -0.28, y: 0, r: 0.48 },
   ]),
 };
 
