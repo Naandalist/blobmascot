@@ -1,6 +1,6 @@
 # blobmascot
 
-Procedural blob mascot for React. Morph, emote, react.
+Interactive blob mascot for React apps. Shape, expression, and gaze update live on canvas.
 
 Published on npm. No sprites, no Lottie files, no asset pipeline. Shape, expression, motion, and gaze are independent axes that lerp on a canvas.
 
