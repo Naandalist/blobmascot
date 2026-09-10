@@ -11,13 +11,19 @@ export type BlobMascotProps = {
   size?: number;
   className?: string;
   label?: string;
+  followCursor?: boolean;
 };
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
 
 export function BlobMascot({
   controller,
   size = 200,
   className,
   label,
+  followCursor = true,
 }: BlobMascotProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -46,6 +52,28 @@ export function BlobMascot({
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [controller, size]);
+
+  useEffect(() => {
+    if (!followCursor) {
+      controller.resetGaze();
+      return;
+    }
+
+    const onMove = (event: PointerEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const dx = (event.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+      const dy = (event.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+      controller.lookAt({
+        yaw: clamp(dx, -1, 1) * 42,
+        pitch: clamp(dy, -1, 1) * 28,
+      });
+    };
+
+    window.addEventListener("pointermove", onMove);
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [controller, followCursor]);
 
   const snapshot = controller.getSnapshot();
   const aria = label ?? `${snapshot.expression} ${snapshot.shape} mascot`;

@@ -47,6 +47,7 @@ export const STATES = [
   "sleep",
   "play",
   "orbit",
+  "swirl",
   "burst",
   "comet",
 ] as const;
@@ -62,6 +63,24 @@ export const PLAYGROUND_STATES = [
   "notify",
   "exclaim",
   "sleep",
+  "play",
+  "orbit",
+  "swirl",
+  "burst",
+] as const;
+
+export const PALETTE = [
+  "#111111",
+  "#8B5A3C",
+  "#E15B4A",
+  "#E8873A",
+  "#F0C93A",
+  "#7BC47F",
+  "#5EC4A0",
+  "#4B8FEA",
+  "#8B5CF6",
+  "#D9467A",
+  "#9AA0A6",
 ] as const;
 
 export const ONE_SHOT_STATES: readonly BlobState[] = [
