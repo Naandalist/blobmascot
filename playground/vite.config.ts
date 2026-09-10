@@ -7,7 +7,12 @@ const root = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   root,
+  base: "./",
   plugins: [react()],
+  build: {
+    outDir: resolve(root, "../dist-playground"),
+    emptyOutDir: true,
+  },
   resolve: {
     alias: {
       blobmascot: resolve(root, "../src/index.ts"),

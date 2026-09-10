@@ -1,7 +1,9 @@
 node_modules
 dist
+dist-playground
 .DS_Store
 *.log
 .vite
 .idea
-.vscode
+.vscode/*
+!.vscode/settings.json

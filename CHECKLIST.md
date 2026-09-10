@@ -1,21 +1,30 @@
 # blobmascot checklist
 
 ## A. Setup repo
-- [x] Cek nama npm `blobmascot` (404 = kosong)
+- [x] Cek nama npm `blobmascot`
 - [x] Repo GitHub `Naandalist/blobmascot`
 - [x] Scaffold Vite + TS + React playground
-- [x] Folder `src/core` `geometry` `face` `motion` `fx` `render` `export` `react`
-- [x] `package.json` name `blobmascot`, peer React
+- [x] Folder src
+- [x] package.json + peer React
 - [x] README + MIT
 
 ## B. Fase 0 spike
-- [x] Path 3 shape dengan titik sama: circle, pebble, cloud
-- [x] Lerp morph antar shape
-- [x] 3 muka: neutral, happy, sad
-- [x] State idle + thinking
-- [x] Gaze kiri/kanan
-- [ ] Playground terasa lembek (review di PR)
-- [ ] ~60fps satu instance (review di PR)
+- [x] Morph shape
+- [x] Faces
+- [x] Idle + thinking
+- [x] Gaze
+- [x] Feel + merge to main
 
-## C-G
-Lihat percakapan plan. Jangan mulai 0.1.0 sebelum spike lolos.
+## C. 0.1.1
+- [x] Version 0.1.1
+- [x] Public API: BlobMascot, useBlobMascot, exportPng
+- [x] poke()
+- [x] tsup external React
+- [x] playground production build
+- [ ] Demo host on GitHub Pages
+- [ ] npm publish (later, 0.2.0 or when ready)
+
+## D. 0.2.0
+- [ ] GIF / WebP export
+- [ ] CSS theme / skin
+- [ ] Multi instance perf

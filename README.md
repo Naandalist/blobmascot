@@ -2,34 +2,53 @@
 
 Procedural blob mascot for React. Morph, emote, react.
 
-Live canvas character. Shape, expression, and motion are three independent axes. GIF/WebP are export extras, not how it renders.
+Live canvas character. Shape, expression, and motion are independent axes. PNG export is included. GIF/WebP come later.
 
-> Inspired by the idea behind [`reactive_bloub`](https://pub.dev/packages/reactive_bloub) (Flutter). This is an original rewrite, not a port of that source.
+Inspired by the idea behind [`reactive_bloub`](https://pub.dev/packages/reactive_bloub).
 
 ## Status
 
-Phase 0 spike is in progress: 3 shapes, 3 faces, idle/thinking, live morph.
+**0.1.1** package-ready playground + library API.
 
-Not published yet. Package name reserved in this repo as `blobmascot`.
+- 12 shapes
+- 12 expressions
+- cursor gaze, blink, liveliness
+- click to poke
+- `exportPng()`
 
-## Install (later)
+Not on npm yet. Install from GitHub or local `dist`.
 
-```bash
-npm i blobmascot
-```
+## Usage
 
 ```tsx
-import { BlobMascot, useBlobMascot } from "blobmascot";
+import { BlobMascot, useBlobMascot, exportPng } from "blobmascot";
 
 function App() {
   const mascot = useBlobMascot({
-    shape: "cloud",
+    shape: "droplet",
     expression: "curious",
     state: "idle",
+    color: "#111111",
   });
 
-  return <BlobMascot controller={mascot} size={200} />;
+  return (
+    <BlobMascot
+      controller={mascot}
+      size={240}
+      followCursor
+    />
+  );
 }
+```
+
+```ts
+mascot.setShape("clover");
+mascot.setExpression("happy");
+mascot.setState("thinking");
+mascot.setColor("#4B8FEA");
+mascot.lookAt({ yaw: 20, pitch: -8 });
+mascot.poke();
+const png = await exportPng(mascot.getSnapshot(), 1024);
 ```
 
 ## Develop
@@ -39,28 +58,37 @@ npm install
 npm run dev
 ```
 
-Playground runs at the Vite URL. Library source lives in `src/`.
+```bash
+npm run build
+npm run build:playground
+npm run typecheck
+```
+
+Playground source is `playground/`. Library source is `src/`.
+
+Demo deploys to GitHub Pages from `main`:
+
+https://naandalist.github.io/blobmascot/
 
 ## Layout
 
 ```
 src/
-  core/        state machine, easing
+  core/        controller, runtime, types
   geometry/    shape paths + morph
-  face/        expressions
-  motion/      idle / thinking / orbit / burst
-  fx/          particles, rings
+  face/        expressions + 3D gaze
+  motion/      idle, thinking, burst, ...
   render/      canvas 2d
-  export/      png, gif (phase 2)
-  react/       BlobMascot, useBlobMascot
+  export/      png (gif later)
+  react/       <BlobMascot />, useBlobMascot()
 playground/
 ```
 
 ## Roadmap
 
-- **0.0.x** spike: circle, pebble, cloud + neutral/happy/sad + idle/thinking
-- **0.1.0** Flutter parity + PNG export + demo
-- **0.2.0** GIF export, poke, CSS theme
+- **0.0.x** spike: closed
+- **0.1.1** public API, poke, PNG, playground build
+- **0.2.0** GIF/WebP export, CSS theme, npm publish
 
 ## License
 
