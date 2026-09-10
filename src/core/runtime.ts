@@ -40,7 +40,7 @@ export function createRuntime(initial: BlobSnapshot) {
       points = lerpPoints(points, getShapePoints(snapshot.shape), t);
       face = lerpFace(face, getFace(snapshot.expression), t);
       rgb = lerpRgb(rgb, parseHex(snapshot.color), t);
-      const look = damp(Math.min(dt, 0.05), 16);
+      const look = damp(Math.min(dt, 0.05), 11);
       gaze = {
         yaw: gaze.yaw + (snapshot.gaze.yaw - gaze.yaw) * look,
         pitch: gaze.pitch + (snapshot.gaze.pitch - gaze.pitch) * look,

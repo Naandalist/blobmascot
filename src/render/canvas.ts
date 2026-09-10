@@ -1,10 +1,15 @@
 import { SHAPE_FACE, toCanvasPoints, type Point } from "../geometry/shapes";
+import { eyePoses, getLiveliness } from "../face/gaze";
 import type { VisualFrame } from "../core/runtime";
 import type { BlobSnapshot } from "../core/types";
 import { createRuntime } from "../core/runtime";
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
+}
+
+function rad(deg: number) {
+  return (deg * Math.PI) / 180;
 }
 
 function smoothPath(ctx: CanvasRenderingContext2D, points: Point[]) {
@@ -94,12 +99,16 @@ export function drawFrame(
     radius,
   );
 
-  const turnX = Math.max(-1, Math.min(1, frame.gaze.yaw / 80));
-  const turnY = Math.max(-1, Math.min(1, frame.gaze.pitch / 70));
+  const tracking = Math.hypot(frame.gaze.yaw, frame.gaze.pitch) > 5;
+  const life = getLiveliness(time, tracking ? 0.4 : 1);
+  const yaw = frame.gaze.yaw + life.dYaw;
+  const pitch = frame.gaze.pitch + life.dPitch;
+  const roll = life.dRoll;
+  const turnX = Math.max(-1, Math.min(1, yaw / 80));
 
   ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(frame.motion.tilt + turnX * 0.08);
+  ctx.translate(cx + life.driftX * radius, cy + life.driftY * radius);
+  ctx.rotate(frame.motion.tilt + turnX * 0.12 + rad(roll) * 0.35);
   ctx.translate(-cx, -cy);
 
   smoothPath(ctx, points);
@@ -126,26 +135,29 @@ export function drawFrame(
 
   const fit = SHAPE_FACE[frame.shape] ?? SHAPE_FACE.circle;
   const faceR = radius * fit.scale;
-  const faceY = cy + fit.y * radius;
-  const gazeX = turnX * faceR * 0.2;
-  const gazeY = turnY * faceR * 0.18;
-  const spread = frame.face.spread * faceR * 0.92;
-  const eyeW = Math.max(1.2, frame.face.width * faceR);
+  const faceY = cy + fit.y * radius + frame.face.y * faceR;
+  const split = Math.max(8, frame.face.spread * 72);
+  const poses = eyePoses(yaw * 0.85, pitch * 0.85, roll, faceR, split);
   const canBlink = frame.face.kind < 0.55 && frame.state !== "sleep";
   const wink = frame.state === "wink" ? 1 : 0;
   const leftBlink = canBlink ? Math.max(frame.blink, wink) : 0;
   const rightBlink = canBlink ? frame.blink : 0;
-  const leftH = Math.max(1.2, frame.face.height * faceR * (1 - leftBlink * 0.92) * (1 + Math.max(0, turnX) * 0.08));
-  const rightH = Math.max(1.2, frame.face.height * faceR * (1 - rightBlink * 0.92) * (1 + Math.max(0, -turnX) * 0.08));
-  const leftW = Math.max(1.2, eyeW * (1 + turnX * 0.28));
-  const rightW = Math.max(1.2, eyeW * (1 - turnX * 0.28));
-  const pad = faceR * 0.28;
-  const leftX = clamp(cx - spread + gazeX, cx - faceR + pad, cx + faceR - pad);
-  const rightX = clamp(cx + spread + gazeX, cx - faceR + pad, cx + faceR - pad);
-  const eyeY = clamp(faceY + frame.face.y * faceR + gazeY, faceY - faceR + pad, faceY + faceR - pad);
+  const pad = faceR * 0.22;
 
-  drawEye(ctx, leftX, eyeY, leftW, leftH, -frame.face.rotate, frame.face.kind);
-  drawEye(ctx, rightX, eyeY, rightW, rightH, frame.face.rotate, frame.face.kind);
+  const drawOne = (pose: (typeof poses)[0], blink: number, sign: number) => {
+    const depth = Math.max(0.22, pose.depth);
+    const squash = 0.62 + 0.38 * depth;
+    const w = Math.max(1.2, frame.face.width * faceR * squash * (1 + turnX * 0.12 * sign));
+    const h = Math.max(1.2, frame.face.height * faceR * squash * (1 - blink * 0.92));
+    const x = clamp(cx + pose.x, cx - faceR + pad, cx + faceR + pad);
+    const y = clamp(faceY + pose.y, faceY - faceR + pad, faceY + faceR - pad);
+    const basisRot = Math.atan2(pose.dx, pose.dy);
+    const rot = basisRot + frame.face.rotate * sign;
+    drawEye(ctx, x, y, w, h, rot, frame.face.kind);
+  };
+
+  drawOne(poses[0], leftBlink, -1);
+  drawOne(poses[1], rightBlink, 1);
 
   ctx.restore();
 
