@@ -74,10 +74,10 @@ export const SHAPE_FACE: Record<BlobShape, ShapeFace> = {
   capsule: { y: 0, scale: 0.88 },
   triangle: { y: 0.14, scale: 0.74 },
   cloud: { y: 0.02, scale: 0.9 },
-  droplet: { y: 0.18, scale: 0.78 },
-  flame: { y: 0.16, scale: 0.76 },
+  droplet: { y: 0.2, scale: 0.76 },
+  flame: { y: 0.18, scale: 0.74 },
   medal: { y: -0.2, scale: 0.74 },
-  acorn: { y: -0.06, scale: 0.88 },
+  acorn: { y: 0.02, scale: 0.86 },
   jellyfish: { y: -0.24, scale: 0.7 },
   clover: { y: 0, scale: 0.72 },
 };
@@ -96,19 +96,21 @@ const SHAPE_POINTS: Record<BlobShape, Point[]> = {
   ]),
   droplet: polar((angle) => {
     const tip = Math.max(0, 0.5 + 0.5 * Math.sin(angle));
-    return 0.32 + 0.5 * Math.pow(tip, 1.05);
+    const top = Math.max(0, -Math.sin(angle));
+    return 0.4 + 0.42 * Math.pow(tip, 1.05) + 0.1 * top;
   }),
   flame: polar((angle) => {
     const lean = angle - 0.22;
     const tip = Math.max(0, 0.5 + 0.5 * Math.sin(lean));
-    return 0.32 + 0.5 * Math.pow(tip, 1.08) + 0.03 * Math.sin(2 * lean);
+    const top = Math.max(0, -Math.sin(lean));
+    return 0.4 + 0.4 * Math.pow(tip, 1.08) + 0.1 * top + 0.03 * Math.sin(2 * lean);
   }),
   medal: unionCircles([
     { x: 0, y: -0.14, r: 0.64 },
     { x: -0.28, y: 0.48, r: 0.34 },
     { x: 0.28, y: 0.48, r: 0.34 },
   ]),
-  acorn: polar((angle) => 0.68 + 0.14 * Math.sin(angle) + 0.03 * Math.cos(2 * angle)),
+  acorn: polar((angle) => 0.72 + 0.08 * Math.sin(angle) + 0.02 * Math.cos(2 * angle)),
   jellyfish: unionCircles([
     { x: 0, y: -0.16, r: 0.62 },
     { x: -0.24, y: 0.5, r: 0.3 },
