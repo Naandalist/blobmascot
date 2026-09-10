@@ -1,10 +1,17 @@
 # blobmascot
 
+[![npm](https://img.shields.io/npm/v/blobmascot.svg)](https://www.npmjs.com/package/blobmascot)
+[![license](https://img.shields.io/npm/l/blobmascot.svg)](./LICENSE)
+[![ci](https://github.com/Naandalist/blobmascot/actions/workflows/ci.yml/badge.svg)](https://github.com/Naandalist/blobmascot/actions/workflows/ci.yml)
+[![demo](https://img.shields.io/badge/demo-live-4B8FEA.svg)](https://naandalist.github.io/blobmascot/)
+
+**[Live demo](https://naandalist.github.io/blobmascot/)** — playground in the browser. Click the blob, morph shapes, watch the gaze.
+
 Interactive blob mascot for React apps. Shape, expression, and gaze update live on canvas.
 
 Published on npm. No sprites, no Lottie files, no asset pipeline. Shape, expression, motion, and gaze are independent axes that lerp on a canvas.
 
-[npm](https://www.npmjs.com/package/blobmascot) · [demo](https://naandalist.github.io/blobmascot/) · [changelog](./CHANGELOG.md) · [source](https://github.com/Naandalist/blobmascot)
+[npm](https://www.npmjs.com/package/blobmascot) · [changelog](./CHANGELOG.md) · [source](https://github.com/Naandalist/blobmascot)
 
 ```bash
 npm install blobmascot
@@ -232,11 +239,7 @@ function Pair() {
 
 If the user has `prefers-reduced-motion: reduce`, idle liveliness freezes. Shape and expression changes still apply.
 
-### Playground
-
-The live demo is the same app as `playground/`:
-
-https://naandalist.github.io/blobmascot/
+### Local playground
 
 ```bash
 npm install
