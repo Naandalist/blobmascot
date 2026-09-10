@@ -19,7 +19,7 @@ const FACES: Record<BlobExpression, FacePose> = {
   surprised: { width: 0.135, height: 0.215, spread: 0.225, y: -0.05, rotate: 0, kind: OVAL },
   excited: { width: 0.145, height: 0.23, spread: 0.23, y: -0.06, rotate: 0, kind: OVAL },
   happy: { width: 0.13, height: 0.09, spread: 0.22, y: -0.02, rotate: 0.1, kind: ARC },
-  angry: { width: 0.1, height: 0.155, spread: 0.215, y: -0.06, rotate: 0.34, kind: OVAL },
+  angry: { width: 0.115, height: 0.048, spread: 0.175, y: 0.0, rotate: -0.72, kind: OVAL },
   sad: { width: 0.08, height: 0.14, spread: 0.195, y: 0.03, rotate: -0.1, kind: OVAL },
   suspicious: { width: 0.09, height: 0.13, spread: 0.205, y: -0.02, rotate: 0.2, kind: OVAL },
   curious: { width: 0.08, height: 0.15, spread: 0.19, y: -0.07, rotate: 0.28, kind: OVAL },
