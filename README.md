@@ -1,6 +1,6 @@
 # blobmascot
 
-Procedural blob mascot for React — morph, emote, react.
+Procedural blob mascot for React. Morph, emote, react.
 
 Live canvas character. Shape, expression, and motion are three independent axes. GIF/WebP are export extras, not how it renders.
 
@@ -8,7 +8,7 @@ Live canvas character. Shape, expression, and motion are three independent axes.
 
 ## Status
 
-Scaffold + playground. Phase 0 spike is next (3 shapes × 3 faces × idle/thinking).
+Phase 0 spike is in progress: 3 shapes, 3 faces, idle/thinking, live morph.
 
 Not published yet. Package name reserved in this repo as `blobmascot`.
 
@@ -52,7 +52,7 @@ src/
   fx/          particles, rings
   render/      canvas 2d
   export/      png, gif (phase 2)
-  react/       <BlobMascot />, useBlobMascot()
+  react/       BlobMascot, useBlobMascot
 playground/
 ```
 
