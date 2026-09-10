@@ -21,7 +21,7 @@
 - [x] poke()
 - [x] tsup external React
 - [x] playground production build
-- [ ] Demo host (Vercel / Pages)
+- [ ] Demo host on GitHub Pages
 - [ ] npm publish (later, 0.2.0 or when ready)
 
 ## D. 0.2.0
