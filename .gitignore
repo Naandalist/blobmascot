@@ -5,4 +5,5 @@ dist-playground
 *.log
 .vite
 .idea
-.vscode
+.vscode/*
+!.vscode/settings.json
