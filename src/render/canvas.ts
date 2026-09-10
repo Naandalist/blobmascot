@@ -149,7 +149,7 @@ export function drawFrame(
     const squash = 0.62 + 0.38 * depth;
     const w = Math.max(1.2, frame.face.width * faceR * squash * (1 + turnX * 0.12 * sign));
     const h = Math.max(1.2, frame.face.height * faceR * squash * (1 - blink * 0.92));
-    const x = clamp(cx + pose.x, cx - faceR + pad, cx + faceR + pad);
+    const x = clamp(cx + pose.x, cx - faceR + pad, cx + faceR - pad);
     const y = clamp(faceY + pose.y, faceY - faceR + pad, faceY + faceR - pad);
     const basisRot = Math.atan2(pose.dx, pose.dy);
     const rot = basisRot + frame.face.rotate * sign;
