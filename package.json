@@ -1,7 +1,7 @@
 {
   "name": "blobmascot",
   "version": "0.1.1",
-  "description": "Procedural blob mascot for React. Morph, emote, react.",
+  "description": "Interactive blob mascot for React apps. Shape, expression, and gaze update live on canvas.",
   "type": "module",
   "license": "MIT",
   "author": {
