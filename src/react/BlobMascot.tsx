@@ -64,11 +64,11 @@ export function BlobMascot({
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
       if (rect.width < 8 || rect.height < 8) return;
-      const dx = (event.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
-      const dy = (event.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+      const dx = (event.clientX - (rect.left + rect.width / 2)) / (window.innerWidth * 0.32);
+      const dy = (event.clientY - (rect.top + rect.height / 2)) / (window.innerHeight * 0.32);
       controllerRef.current.lookAt({
-        yaw: clamp(dx, -1, 1) * 42,
-        pitch: clamp(dy, -1, 1) * 28,
+        yaw: clamp(dx, -1, 1) * 80,
+        pitch: clamp(dy, -1, 1) * 64,
       });
     };
 
