@@ -6,14 +6,13 @@ import {
   PLAYGROUND_STATES,
   SHAPES,
   useBlobMascot,
-  exportGif,
   exportPng,
   exportWebp,
 } from "../src";
 import { MiniBlob } from "./MiniBlob";
 
 type Theme = "lavender" | "light" | "dark";
-type ExportKind = "png" | "gif" | "webp";
+type ExportKind = "png" | "webp";
 
 const DARK_BODY = "#ffffff";
 const LIGHT_BODY = "#111111";
@@ -46,11 +45,9 @@ export function App() {
     setMenuOpen(false);
     const snapshot = mascot.getSnapshot();
     const blob =
-      kind === "gif"
-        ? await exportGif(snapshot, { size: 256, durationMs: 2000, fps: 12 })
-        : kind === "webp"
-          ? await exportWebp(snapshot, { size: 1024 })
-          : await exportPng(snapshot, 1024);
+      kind === "webp"
+        ? await exportWebp(snapshot, { size: 1024 })
+        : await exportPng(snapshot, 1024);
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -81,8 +78,18 @@ export function App() {
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
           >
-            Export
             <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 3v12m0 0 4.5-4.5M12 15 7.5 10.5M5 21h14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Export
+            <svg className="caret" viewBox="0 0 24 24" aria-hidden="true">
               <path
                 d="M6 9l6 6 6-6"
                 fill="none"
@@ -97,9 +104,6 @@ export function App() {
             <div className="export-list" role="menu">
               <button type="button" role="menuitem" onClick={() => download("png")}>
                 PNG
-              </button>
-              <button type="button" role="menuitem" onClick={() => download("gif")}>
-                GIF
               </button>
               <button type="button" role="menuitem" onClick={() => download("webp")}>
                 WebP
@@ -202,6 +206,12 @@ export function App() {
           target="_blank"
           rel="noreferrer"
         >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.12-1.47-1.12-1.47-.92-.63.07-.62.07-.62 1 .07 1.53 1.04 1.53 1.04.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.1.39-1.99 1.03-2.7-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.03a9.56 9.56 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.37.2 2.39.1 2.64.64.71 1.03 1.6 1.03 2.7 0 3.85-2.34 4.7-4.57 4.95.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"
+            />
+          </svg>
           <span>
             <strong>View on GitHub</strong>
             <small>Naandalist/blobmascot</small>
