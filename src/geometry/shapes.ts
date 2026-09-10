@@ -74,7 +74,7 @@ export const SHAPE_FACE: Record<BlobShape, ShapeFace> = {
   capsule: { y: 0, scale: 0.88 },
   triangle: { y: 0.14, scale: 0.74 },
   cloud: { y: 0.02, scale: 0.9 },
-  droplet: { y: 0.2, scale: 0.76 },
+  droplet: { y: 0.24, scale: 0.7 },
   flame: { y: 0.18, scale: 0.74 },
   medal: { y: -0.2, scale: 0.74 },
   acorn: { y: 0.02, scale: 0.86 },
@@ -95,9 +95,9 @@ const SHAPE_POINTS: Record<BlobShape, Point[]> = {
     { x: 0, y: 0.24, r: 0.5 },
   ]),
   droplet: polar((angle) => {
-    const tip = Math.max(0, 0.5 + 0.5 * Math.sin(angle));
-    const top = Math.max(0, -Math.sin(angle));
-    return 0.4 + 0.42 * Math.pow(tip, 1.05) + 0.1 * top;
+    const fromTop = angle + Math.PI / 2;
+    const widen = Math.pow(Math.abs(Math.sin(fromTop / 2)), 0.72);
+    return 0.08 + 0.74 * widen;
   }),
   flame: polar((angle) => {
     const lean = angle - 0.22;
