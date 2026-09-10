@@ -22,7 +22,7 @@
 - [x] tsup external React
 - [x] playground production build
 - [x] Demo host on GitHub Pages
-- [ ] npm publish via OIDC (`publish.yml`)
+- [x] npm publish via OIDC (`publish.yml`)
 
 ## D. 0.2.0
 - [ ] GIF / WebP export
