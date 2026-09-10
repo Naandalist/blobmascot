@@ -79,13 +79,39 @@ body,
   left: 50%;
   bottom: 28px;
   transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
   z-index: 2;
 }
 
+.export-list {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  min-width: 148px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--dock);
+  box-shadow: 0 12px 28px rgb(16 16 20 / 16%);
+  overflow: hidden;
+}
+
+.export-list button {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  padding: 11px 14px;
+  font: 600 13px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.export-list button:hover {
+  background: var(--about);
+}
+
 .export {
-  position: static;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -101,6 +127,11 @@ body,
 
 [data-theme="dark"] .export {
   color: #16141c;
+}
+
+.export svg {
+  width: 16px;
+  height: 16px;
 }
 
 .export:hover {
@@ -178,6 +209,10 @@ h2 {
 
 .swatch.on {
   border-color: #111;
+}
+
+[data-theme="dark"] .swatch.on {
+  border-color: #fff;
 }
 
 .toggle-row {
