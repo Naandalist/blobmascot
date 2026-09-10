@@ -70,6 +70,27 @@ Demo deploys to GitHub Pages from `main`:
 
 https://naandalist.github.io/blobmascot/
 
+## Publish (OIDC)
+
+No npm token in GitHub. Releases use trusted publishing.
+
+1. On [npmjs.com](https://www.npmjs.com) open the `blobmascot` package settings (after the name exists).
+2. Trusted Publisher \u2192 GitHub Actions:
+   - Organization or user: `Naandalist`
+   - Repository: `blobmascot`
+   - Workflow filename: `publish.yml`
+   - Allow `npm publish`
+3. Push a version tag from `main`:
+
+```bash
+git checkout main
+git pull
+git tag v0.1.1
+git push origin v0.1.1
+```
+
+The `publish` workflow builds `dist/` and runs `npm publish --access public`. Provenance is attached automatically.
+
 ## Layout
 
 ```
@@ -88,7 +109,7 @@ playground/
 
 - **0.0.x** spike: closed
 - **0.1.1** public API, poke, PNG, playground build
-- **0.2.0** GIF/WebP export, CSS theme, npm publish
+- **0.2.0** GIF/WebP export, CSS theme
 
 ## License
 
