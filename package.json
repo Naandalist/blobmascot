@@ -1,0 +1,48 @@
+{
+  "name": "blobmascot",
+  "version": "0.0.0",
+  "description": "Procedural blob mascot for React — morph, emote, react.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Listiananda Apriliawan",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Naandalist/blobmascot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Naandalist/blobmascot/issues"
+  },
+  "homepage": "https://github.com/Naandalist/blobmascot#readme",
+  "keywords": ["react", "mascot", "blob", "avatar", "canvas", "chatbot", "animation"],
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "dev": "vite --config playground/vite.config.ts",
+    "build": "tsup src/index.ts --dts --format esm,cjs --clean",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5"
+  }
+}

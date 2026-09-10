@@ -1,0 +1,6 @@
+playground
+src
+*.config.ts
+tsconfig.json
+.git
+.github
