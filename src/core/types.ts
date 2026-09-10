@@ -71,6 +71,7 @@ export const PLAYGROUND_STATES = [
 
 export const PALETTE = [
   "#111111",
+  "#FFFFFF",
   "#8B5A3C",
   "#E15B4A",
   "#E8873A",
