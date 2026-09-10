@@ -1,4 +1,4 @@
-import { toCanvasPoints, type Point } from "../geometry/shapes";
+import { SHAPE_FACE, toCanvasPoints, type Point } from "../geometry/shapes";
 import type { VisualFrame } from "../core/runtime";
 import type { BlobSnapshot } from "../core/types";
 import { createRuntime } from "../core/runtime";
@@ -124,22 +124,25 @@ export function drawFrame(
   ctx.fillStyle = gloss;
   ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
 
-  const gazeX = turnX * radius * 0.2;
-  const gazeY = turnY * radius * 0.18;
-  const spread = frame.face.spread * radius * 0.92;
-  const eyeW = Math.max(1.2, frame.face.width * radius);
+  const fit = SHAPE_FACE[frame.shape] ?? SHAPE_FACE.circle;
+  const faceR = radius * fit.scale;
+  const faceY = cy + fit.y * radius;
+  const gazeX = turnX * faceR * 0.2;
+  const gazeY = turnY * faceR * 0.18;
+  const spread = frame.face.spread * faceR * 0.92;
+  const eyeW = Math.max(1.2, frame.face.width * faceR);
   const canBlink = frame.face.kind < 0.55 && frame.state !== "sleep";
   const wink = frame.state === "wink" ? 1 : 0;
   const leftBlink = canBlink ? Math.max(frame.blink, wink) : 0;
   const rightBlink = canBlink ? frame.blink : 0;
-  const leftH = Math.max(1.2, frame.face.height * radius * (1 - leftBlink * 0.92) * (1 + Math.max(0, turnX) * 0.08));
-  const rightH = Math.max(1.2, frame.face.height * radius * (1 - rightBlink * 0.92) * (1 + Math.max(0, -turnX) * 0.08));
+  const leftH = Math.max(1.2, frame.face.height * faceR * (1 - leftBlink * 0.92) * (1 + Math.max(0, turnX) * 0.08));
+  const rightH = Math.max(1.2, frame.face.height * faceR * (1 - rightBlink * 0.92) * (1 + Math.max(0, -turnX) * 0.08));
   const leftW = Math.max(1.2, eyeW * (1 + turnX * 0.28));
   const rightW = Math.max(1.2, eyeW * (1 - turnX * 0.28));
-  const pad = radius * 0.22;
-  const leftX = clamp(cx - spread + gazeX, cx - radius + pad, cx + radius - pad);
-  const rightX = clamp(cx + spread + gazeX, cx - radius + pad, cx + radius - pad);
-  const eyeY = clamp(cy + frame.face.y * radius + gazeY, cy - radius + pad, cy + radius - pad);
+  const pad = faceR * 0.28;
+  const leftX = clamp(cx - spread + gazeX, cx - faceR + pad, cx + faceR - pad);
+  const rightX = clamp(cx + spread + gazeX, cx - faceR + pad, cx + faceR - pad);
+  const eyeY = clamp(faceY + frame.face.y * faceR + gazeY, faceY - faceR + pad, faceY + faceR - pad);
 
   drawEye(ctx, leftX, eyeY, leftW, leftH, -frame.face.rotate, frame.face.kind);
   drawEye(ctx, rightX, eyeY, rightW, rightH, frame.face.rotate, frame.face.kind);
