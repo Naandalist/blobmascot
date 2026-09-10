@@ -21,8 +21,8 @@
 - [x] poke()
 - [x] tsup external React
 - [x] playground production build
-- [ ] Demo host on GitHub Pages
-- [ ] npm publish (later, 0.2.0 or when ready)
+- [x] Demo host on GitHub Pages
+- [ ] npm publish via OIDC (`publish.yml`)
 
 ## D. 0.2.0
 - [ ] GIF / WebP export
