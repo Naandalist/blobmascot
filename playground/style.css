@@ -42,14 +42,31 @@ body,
   left: 50%;
   bottom: 28px;
   transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   border: 0;
-  background: #2c2f3a;
+  background: #17181d;
   color: white;
   font: 600 13px/1 Inter, ui-sans-serif, system-ui, sans-serif;
-  padding: 10px 16px;
+  padding: 12px 18px;
   border-radius: 999px;
   cursor: pointer;
   z-index: 2;
+  box-shadow: 0 10px 24px rgb(16 16 20 / 18%);
+}
+
+.export svg {
+  width: 16px;
+  height: 16px;
+}
+
+.export:hover {
+  background: #2a2c34;
+}
+
+.export:active {
+  transform: translateX(-50%) scale(0.98);
 }
 
 .dock {
@@ -157,13 +174,41 @@ h2 {
 }
 
 .about {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   border: 1px solid #ece8f0;
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 12px 14px;
   color: #2b2b2b;
   text-decoration: none;
+  background: #faf9fb;
+}
+
+.about svg {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+
+.about span {
+  display: grid;
+  gap: 2px;
+}
+
+.about strong {
   font-size: 13px;
+  font-weight: 700;
+}
+
+.about small {
+  color: #8b8793;
+  font-size: 11px;
+}
+
+.about:hover {
+  border-color: #d9d4e0;
+  background: #fff;
 }
 
 @media (max-width: 860px) {
