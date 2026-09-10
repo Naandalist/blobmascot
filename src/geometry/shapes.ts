@@ -49,6 +49,20 @@ function roundedPolygon(sides: number, size: number, round: number, turn = -Math
   });
 }
 
+function teardrop(): Point[] {
+  return Array.from({ length: POINT_COUNT }, (_, i) => {
+    const angle = (i / POINT_COUNT) * Math.PI * 2 - Math.PI / 2;
+    const s = Math.sin(angle);
+    const c = Math.cos(angle);
+    const u = (s + 1) / 2;
+    const w = Math.pow(u, 0.46);
+    return {
+      x: c * 0.7 * w,
+      y: s < 0 ? s * 0.92 : s * 0.7,
+    };
+  });
+}
+
 function stadium(halfW: number, halfH: number): Point[] {
   const cap = halfH;
   const inner = Math.max(0.01, halfW - cap);
@@ -74,7 +88,7 @@ export const SHAPE_FACE: Record<BlobShape, ShapeFace> = {
   capsule: { y: 0, scale: 0.88 },
   triangle: { y: 0.14, scale: 0.74 },
   cloud: { y: 0.02, scale: 0.9 },
-  droplet: { y: 0.24, scale: 0.7 },
+  droplet: { y: 0.2, scale: 0.68 },
   flame: { y: 0.18, scale: 0.74 },
   medal: { y: -0.2, scale: 0.74 },
   acorn: { y: 0.02, scale: 0.86 },
@@ -94,11 +108,7 @@ const SHAPE_POINTS: Record<BlobShape, Point[]> = {
     { x: 0.34, y: 0.06, r: 0.5 },
     { x: 0, y: 0.24, r: 0.5 },
   ]),
-  droplet: polar((angle) => {
-    const fromTop = angle + Math.PI / 2;
-    const tip = Math.exp(-Math.pow(fromTop / 0.34, 2)) * 0.52;
-    return 0.5 + 0.22 * Math.sin(angle) + tip;
-  }),
+  droplet: teardrop(),
   flame: polar((angle) => {
     const lean = angle - 0.22;
     const tip = Math.max(0, 0.5 + 0.5 * Math.sin(lean));
