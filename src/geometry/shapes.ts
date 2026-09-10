@@ -96,8 +96,8 @@ const SHAPE_POINTS: Record<BlobShape, Point[]> = {
   ]),
   droplet: polar((angle) => {
     const fromTop = angle + Math.PI / 2;
-    const widen = Math.pow(Math.abs(Math.sin(fromTop / 2)), 0.72);
-    return 0.08 + 0.74 * widen;
+    const tip = Math.exp(-Math.pow(fromTop / 0.34, 2)) * 0.52;
+    return 0.5 + 0.22 * Math.sin(angle) + tip;
   }),
   flame: polar((angle) => {
     const lean = angle - 0.22;
