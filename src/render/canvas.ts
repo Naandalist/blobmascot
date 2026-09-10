@@ -3,6 +3,10 @@ import type { VisualFrame } from "../core/runtime";
 import type { BlobSnapshot } from "../core/types";
 import { createRuntime } from "../core/runtime";
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
 function smoothPath(ctx: CanvasRenderingContext2D, points: Point[]) {
   const count = points.length;
   const mid = (a: Point, b: Point): Point => ({
@@ -87,13 +91,12 @@ export function drawFrame(
     radius,
   );
 
-  const turnX = frame.gaze.yaw / 80;
-  const turnY = frame.gaze.pitch / 70;
+  const turnX = Math.max(-1, Math.min(1, frame.gaze.yaw / 80));
+  const turnY = Math.max(-1, Math.min(1, frame.gaze.pitch / 70));
 
   ctx.save();
-  ctx.translate(cx + turnX * radius * 0.12, cy + turnY * radius * 0.1);
-  ctx.rotate(frame.motion.tilt + turnX * 0.32);
-  ctx.scale(1 + Math.abs(turnX) * 0.05, 1 - Math.abs(turnY) * 0.07);
+  ctx.translate(cx, cy);
+  ctx.rotate(frame.motion.tilt + turnX * 0.08);
   ctx.translate(-cx, -cy);
 
   smoothPath(ctx, points);
@@ -103,6 +106,7 @@ export function drawFrame(
   ctx.save();
   smoothPath(ctx, points);
   ctx.clip();
+
   const gloss = ctx.createRadialGradient(
     cx - radius * 0.18,
     cy - radius * 0.28,
@@ -116,24 +120,28 @@ export function drawFrame(
   gloss.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = gloss;
   ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
-  ctx.restore();
 
-  const gazeX = turnX * radius * 0.38;
-  const gazeY = turnY * radius * 0.34;
-  const eyeY = cy + frame.face.y * radius + gazeY;
-  const spread = frame.face.spread * radius * (1 - Math.abs(turnX) * 0.12);
+  const gazeX = turnX * radius * 0.2;
+  const gazeY = turnY * radius * 0.18;
+  const spread = frame.face.spread * radius * 0.92;
   const eyeW = Math.max(1.2, frame.face.width * radius);
   const canBlink = frame.face.kind < 0.55 && frame.state !== "sleep";
   const wink = frame.state === "wink" ? 1 : 0;
   const leftBlink = canBlink ? Math.max(frame.blink, wink) : 0;
   const rightBlink = canBlink ? frame.blink : 0;
-  const leftH = Math.max(1.2, frame.face.height * radius * (1 - leftBlink * 0.92));
-  const rightH = Math.max(1.2, frame.face.height * radius * (1 - rightBlink * 0.92));
+  const leftH = Math.max(1.2, frame.face.height * radius * (1 - leftBlink * 0.92) * (1 + Math.max(0, turnX) * 0.08));
+  const rightH = Math.max(1.2, frame.face.height * radius * (1 - rightBlink * 0.92) * (1 + Math.max(0, -turnX) * 0.08));
+  const leftW = Math.max(1.2, eyeW * (1 + turnX * 0.28));
+  const rightW = Math.max(1.2, eyeW * (1 - turnX * 0.28));
+  const pad = radius * 0.22;
+  const leftX = clamp(cx - spread + gazeX, cx - radius + pad, cx + radius - pad);
+  const rightX = clamp(cx + spread + gazeX, cx - radius + pad, cx + radius - pad);
+  const eyeY = clamp(cy + frame.face.y * radius + gazeY, cy - radius + pad, cy + radius - pad);
 
-  const leftW = Math.max(1.2, eyeW * (1 - turnX * 0.22));
-  const rightW = Math.max(1.2, eyeW * (1 + turnX * 0.22));
-  drawEye(ctx, cx - spread + gazeX, eyeY, leftW, leftH, -frame.face.rotate + turnX * 0.15, frame.face.kind);
-  drawEye(ctx, cx + spread + gazeX, eyeY, rightW, rightH, frame.face.rotate + turnX * 0.15, frame.face.kind);
+  drawEye(ctx, leftX, eyeY, leftW, leftH, -frame.face.rotate, frame.face.kind);
+  drawEye(ctx, rightX, eyeY, rightW, rightH, frame.face.rotate, frame.face.kind);
+
+  ctx.restore();
 
   if (frame.state === "notify" || frame.state === "orbit" || frame.state === "swirl") {
     const angle = time * (frame.state === "notify" ? 2.2 : 1.6);
