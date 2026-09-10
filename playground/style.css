@@ -136,6 +136,11 @@ body,
   height: 16px;
 }
 
+.export .caret {
+  width: 14px;
+  height: 14px;
+}
+
 .export:hover {
   background: var(--export-hover);
 }
@@ -273,6 +278,12 @@ h2 {
   color: var(--text);
   text-decoration: none;
   background: var(--about);
+}
+
+.about svg {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
 }
 
 .about span {
