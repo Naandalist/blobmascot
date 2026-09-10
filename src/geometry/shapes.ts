@@ -2,42 +2,104 @@ import type { BlobShape } from "../core/types";
 
 export type Point = { x: number; y: number };
 
-export const POINT_COUNT = 16;
+export const POINT_COUNT = 32;
 
-function fromRadii(radii: number[]): Point[] {
-  return radii.map((radius, i) => {
+function polar(radiusAt: (angle: number) => number): Point[] {
+  return Array.from({ length: POINT_COUNT }, (_, i) => {
     const angle = (i / POINT_COUNT) * Math.PI * 2 - Math.PI / 2;
+    const radius = radiusAt(angle);
     return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius };
   });
 }
 
-function fillRadii(pattern: number[]): number[] {
-  return Array.from({ length: POINT_COUNT }, (_, i) => pattern[i % pattern.length] ?? 0.7);
+function rayCircle(angle: number, cx: number, cy: number, radius: number): number {
+  const dx = Math.cos(angle);
+  const dy = Math.sin(angle);
+  const b = dx * cx + dy * cy;
+  const disc = b * b - (cx * cx + cy * cy - radius * radius);
+  if (disc < 0) return 0;
+  return Math.max(0, b + Math.sqrt(disc));
 }
 
-const CIRCLE = fromRadii(Array.from({ length: POINT_COUNT }, () => 0.7));
+function unionCircles(lobes: Array<{ x: number; y: number; r: number }>): Point[] {
+  return polar((angle) => {
+    let best = 0;
+    for (const lobe of lobes) {
+      best = Math.max(best, rayCircle(angle, lobe.x, lobe.y, lobe.r));
+    }
+    return best || 0.35;
+  });
+}
 
-const PEBBLE = fromRadii([
-  0.66, 0.7, 0.74, 0.77, 0.73, 0.7, 0.67, 0.63, 0.6, 0.63, 0.66, 0.69, 0.71, 0.68, 0.65, 0.64,
-]);
+function superellipse(power: number, sx: number, sy: number): Point[] {
+  return polar((angle) => {
+    const c = Math.cos(angle);
+    const s = Math.sin(angle);
+    return 1 / Math.pow(Math.pow(Math.abs(c) / sx, power) + Math.pow(Math.abs(s) / sy, power), 1 / power);
+  });
+}
 
-const CLOUD = fromRadii([
-  0.84, 0.73, 0.66, 0.7, 0.64, 0.68, 0.73, 0.63, 0.6, 0.63, 0.72, 0.67, 0.64, 0.7, 0.76, 0.82,
-]);
+function roundedPolygon(sides: number, size: number, round: number, turn = -Math.PI / 2): Point[] {
+  const sector = (Math.PI * 2) / sides;
+  return polar((angle) => {
+    const shifted = ((angle - turn) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+    const local = shifted - sector * Math.floor(shifted / sector) - sector / 2;
+    const edge = Math.cos(sector / 2) / Math.max(0.18, Math.cos(local));
+    return size * (edge * (1 - round) + round);
+  });
+}
+
+function stadium(halfW: number, halfH: number): Point[] {
+  const cap = halfH;
+  const inner = Math.max(0.01, halfW - cap);
+  return polar((angle) => {
+    const c = Math.cos(angle);
+    const s = Math.sin(angle);
+    if (Math.abs(s) < 1e-4) return halfW / Math.max(0.05, Math.abs(c));
+    const tFlat = cap / Math.abs(s);
+    if (Math.abs(tFlat * c) <= inner) return tFlat;
+    return rayCircle(angle, Math.sign(c || 1) * inner, 0, cap);
+  });
+}
 
 const SHAPE_POINTS: Record<BlobShape, Point[]> = {
-  circle: CIRCLE,
-  pebble: PEBBLE,
-  squircle: fromRadii(fillRadii([0.74, 0.74, 0.66, 0.74])),
-  capsule: fromRadii(fillRadii([0.78, 0.7, 0.58, 0.7])),
-  triangle: fromRadii(fillRadii([0.86, 0.58, 0.58])),
-  cloud: CLOUD,
-  droplet: fromRadii(fillRadii([0.86, 0.66, 0.58, 0.66])),
-  flame: fromRadii(fillRadii([0.88, 0.6, 0.7, 0.58])),
-  medal: fromRadii(fillRadii([0.7, 0.78])),
-  acorn: fromRadii(fillRadii([0.76, 0.68, 0.58, 0.68])),
-  jellyfish: fromRadii(fillRadii([0.78, 0.6, 0.7, 0.6])),
-  clover: fromRadii(fillRadii([0.82, 0.58, 0.82, 0.58])),
+  circle: polar(() => 0.78),
+  pebble: polar((angle) => 0.72 + 0.07 * Math.sin(2 * angle + 0.5) + 0.05 * Math.sin(3 * angle + 1.1) + 0.03 * Math.cos(angle - 0.4)),
+  squircle: superellipse(5.2, 0.78, 0.78),
+  capsule: stadium(0.92, 0.5),
+  triangle: roundedPolygon(3, 0.82, 0.42),
+  cloud: unionCircles([
+    { x: -0.34, y: 0.04, r: 0.4 },
+    { x: 0.02, y: -0.26, r: 0.46 },
+    { x: 0.36, y: 0.02, r: 0.4 },
+    { x: -0.02, y: 0.26, r: 0.42 },
+  ]),
+  droplet: polar((angle) => {
+    const tip = Math.max(0, 0.5 + 0.5 * Math.sin(angle));
+    return 0.2 + 0.52 * Math.pow(tip, 1.12);
+  }),
+  flame: polar((angle) => {
+    const lean = angle - 0.28;
+    const tip = Math.max(0, 0.5 + 0.5 * Math.sin(lean));
+    return 0.22 + 0.5 * Math.pow(tip, 1.18) + 0.03 * Math.sin(2 * lean);
+  }),
+  medal: unionCircles([
+    { x: 0, y: -0.16, r: 0.58 },
+    { x: -0.26, y: 0.46, r: 0.3 },
+    { x: 0.26, y: 0.46, r: 0.3 },
+  ]),
+  acorn: polar((angle) => 0.62 + 0.16 * Math.sin(angle) + 0.04 * Math.cos(2 * angle)),
+  jellyfish: unionCircles([
+    { x: 0, y: -0.2, r: 0.56 },
+    { x: -0.22, y: 0.5, r: 0.26 },
+    { x: 0.22, y: 0.5, r: 0.26 },
+  ]),
+  clover: unionCircles([
+    { x: 0, y: -0.34, r: 0.4 },
+    { x: 0.34, y: 0, r: 0.4 },
+    { x: 0, y: 0.34, r: 0.4 },
+    { x: -0.34, y: 0, r: 0.4 },
+  ]),
 };
 
 export function getShapePoints(shape: BlobShape): Point[] {
@@ -45,9 +107,10 @@ export function getShapePoints(shape: BlobShape): Point[] {
 }
 
 export function lerpPoints(from: Point[], to: Point[], t: number): Point[] {
-  return from.map((point, i) => ({
-    x: point.x + (to[i].x - point.x) * t,
-    y: point.y + (to[i].y - point.y) * t,
+  const count = Math.min(from.length, to.length);
+  return Array.from({ length: count }, (_, i) => ({
+    x: from[i].x + (to[i].x - from[i].x) * t,
+    y: from[i].y + (to[i].y - from[i].y) * t,
   }));
 }
 
