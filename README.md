@@ -5,7 +5,9 @@
 [![ci](https://github.com/Naandalist/blobmascot/actions/workflows/ci.yml/badge.svg)](https://github.com/Naandalist/blobmascot/actions/workflows/ci.yml)
 [![demo](https://img.shields.io/badge/demo-live-4B8FEA.svg)](https://naandalist.github.io/blobmascot/)
 
-**[Live demo](https://naandalist.github.io/blobmascot/)** — playground in the browser. Click the blob, morph shapes, watch the gaze.
+**[Live demo](https://naandalist.github.io/blobmascot/)**
+
+Playground in the browser. Click the blob, morph shapes, watch the gaze.
 
 Interactive blob mascot for React apps. Shape, expression, and gaze update live on canvas.
 
