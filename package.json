@@ -4,7 +4,11 @@
   "description": "Procedural blob mascot for React. Morph, emote, react.",
   "type": "module",
   "license": "MIT",
-  "author": "Listiananda Apriliawan",
+  "author": {
+    "name": "Listiananda Apriliawan",
+    "url": "https://naandalist.com",
+    "username": "naandalist"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Naandalist/blobmascot.git"
@@ -13,6 +17,7 @@
     "url": "https://github.com/Naandalist/blobmascot/issues"
   },
   "homepage": "https://github.com/Naandalist/blobmascot#readme",
+  "website": "https://naandalist.com",
   "keywords": [
     "react",
     "mascot",
@@ -20,7 +25,18 @@
     "avatar",
     "canvas",
     "chatbot",
-    "animation"
+    "animation",
+    "character",
+    "procedural",
+    "morph",
+    "expression",
+    "gaze",
+    "follow-cursor",
+    "playground",
+    "ui",
+    "component",
+    "typescript",
+    "naandalist"
   ],
   "sideEffects": false,
   "main": "./dist/index.cjs",
