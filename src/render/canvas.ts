@@ -33,6 +33,41 @@ function jellyPoints(points: Point[], time: number, amount: number): Point[] {
   });
 }
 
+function drawEye(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  rotate: number,
+  kind: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotate);
+  ctx.fillStyle = "#fff";
+  ctx.strokeStyle = "#fff";
+  ctx.lineCap = "round";
+
+  if (kind > 1.4) {
+    ctx.lineWidth = Math.max(2, height);
+    ctx.beginPath();
+    ctx.moveTo(-width, 0);
+    ctx.lineTo(width, 0);
+    ctx.stroke();
+  } else if (kind > 0.55) {
+    ctx.lineWidth = Math.max(2.5, height * 0.45);
+    ctx.beginPath();
+    ctx.arc(0, height * 0.6, width, Math.PI + 0.25, -0.25);
+    ctx.stroke();
+  } else {
+    ctx.beginPath();
+    ctx.ellipse(0, 0, width, height, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
 export function drawFrame(
   ctx: CanvasRenderingContext2D,
   frame: VisualFrame,
@@ -61,51 +96,33 @@ export function drawFrame(
   ctx.fillStyle = frame.color;
   ctx.fill();
 
-  ctx.globalAlpha = 0.22;
-  ctx.beginPath();
-  ctx.ellipse(cx - radius * 0.16, cy - radius * 0.24, radius * 0.26, radius * 0.15, -0.45, 0, Math.PI * 2);
-  ctx.fillStyle = "#fff";
-  ctx.fill();
-  ctx.globalAlpha = 1;
+  ctx.save();
+  smoothPath(ctx, points);
+  ctx.clip();
+  const gloss = ctx.createRadialGradient(
+    cx - radius * 0.18,
+    cy - radius * 0.28,
+    radius * 0.02,
+    cx,
+    cy,
+    radius * 1.05,
+  );
+  gloss.addColorStop(0, "rgba(255,255,255,0.22)");
+  gloss.addColorStop(0.35, "rgba(255,255,255,0.05)");
+  gloss.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = gloss;
+  ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+  ctx.restore();
 
-  const gazeX = (frame.gaze.yaw / 90) * radius * 0.22;
-  const gazeY = (frame.gaze.pitch / 90) * radius * 0.18;
-  const eyeY = cy - radius * 0.08;
-  const eyeSpread = radius * 0.2;
-  const eyeH = Math.max(1.8, radius * 0.11 * frame.face.eyeOpen);
-  const eyeW = radius * 0.09;
+  const gazeX = (frame.gaze.yaw / 90) * radius * 0.16;
+  const gazeY = (frame.gaze.pitch / 90) * radius * 0.12;
+  const eyeY = cy + frame.face.y * radius + gazeY;
+  const spread = frame.face.spread * radius;
+  const eyeW = Math.max(1.2, frame.face.width * radius);
+  const eyeH = Math.max(1.2, frame.face.height * radius);
 
-  ctx.strokeStyle = "#1b2430";
-  ctx.lineWidth = Math.max(2, radius * 0.03);
-  ctx.lineCap = "round";
-  for (const side of [-1, 1]) {
-    const browY = eyeY - eyeH - radius * 0.08;
-    ctx.beginPath();
-    ctx.moveTo(cx + side * (eyeSpread + radius * 0.08), browY - frame.face.brow * 6);
-    ctx.lineTo(cx + side * (eyeSpread - radius * 0.06), browY + frame.face.brow * 4);
-    ctx.stroke();
-  }
-
-  for (const side of [-1, 1]) {
-    ctx.beginPath();
-    ctx.ellipse(cx + side * eyeSpread + gazeX, eyeY + gazeY, eyeW, eyeH, 0, 0, Math.PI * 2);
-    ctx.fillStyle = "#1b2430";
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(cx + side * eyeSpread + gazeX - 2.2, eyeY + gazeY - 2.4, Math.max(1.6, radius * 0.025), 0, Math.PI * 2);
-    ctx.fillStyle = "#fff";
-    ctx.fill();
-  }
-
-  const mouthY = cy + radius * 0.2;
-  const mouthW = radius * 0.16;
-  ctx.beginPath();
-  if (frame.face.smile >= 0) {
-    ctx.arc(cx + gazeX * 0.25, mouthY - frame.face.smile * 3, mouthW, 0.2, Math.PI - 0.2);
-  } else {
-    ctx.arc(cx + gazeX * 0.25, mouthY + 12, mouthW, Math.PI + 0.25, -0.25);
-  }
-  ctx.stroke();
+  drawEye(ctx, cx - spread + gazeX, eyeY, eyeW, eyeH, -frame.face.rotate, frame.face.kind);
+  drawEye(ctx, cx + spread + gazeX, eyeY, eyeW, eyeH, frame.face.rotate, frame.face.kind);
 
   ctx.restore();
 }
