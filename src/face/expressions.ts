@@ -39,7 +39,7 @@ export function lerpFace(from: FacePose, to: FacePose, t: number): FacePose {
     spread: from.spread + (to.spread - from.spread) * t,
     y: from.y + (to.y - from.y) * t,
     rotate: from.rotate + (to.rotate - from.rotate) * t,
-    kind: from.kind + (to.kind - to.kind) * t,
+    kind: from.kind + (to.kind - from.kind) * t,
   };
 }
 

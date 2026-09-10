@@ -65,8 +65,11 @@ function drawEye(
     ctx.arc(0, height * 0.6, width, Math.PI + 0.25, -0.25);
     ctx.stroke();
   } else {
+    const hw = Math.max(0.8, width);
+    const hh = Math.max(0.8, height);
+    const radius = Math.min(hw, hh);
     ctx.beginPath();
-    ctx.ellipse(0, 0, width, height, 0, 0, Math.PI * 2);
+    ctx.roundRect(-hw, -hh, hw * 2, hh * 2, radius);
     ctx.fill();
   }
   ctx.restore();
