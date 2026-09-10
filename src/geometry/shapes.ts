@@ -68,18 +68,18 @@ export type ShapeFace = {
 };
 
 export const SHAPE_FACE: Record<BlobShape, ShapeFace> = {
-  circle: { y: 0, scale: 1 },
-  pebble: { y: 0, scale: 0.96 },
-  squircle: { y: 0, scale: 0.96 },
-  capsule: { y: 0, scale: 0.78 },
-  triangle: { y: 0.14, scale: 0.62 },
-  cloud: { y: 0.02, scale: 0.8 },
-  droplet: { y: 0.18, scale: 0.68 },
-  flame: { y: 0.16, scale: 0.64 },
-  medal: { y: -0.2, scale: 0.62 },
-  acorn: { y: -0.06, scale: 0.78 },
-  jellyfish: { y: -0.24, scale: 0.58 },
-  clover: { y: 0, scale: 0.6 },
+  circle: { y: 0, scale: 1.08 },
+  pebble: { y: 0, scale: 1.04 },
+  squircle: { y: 0, scale: 1.04 },
+  capsule: { y: 0, scale: 0.88 },
+  triangle: { y: 0.14, scale: 0.74 },
+  cloud: { y: 0.02, scale: 0.9 },
+  droplet: { y: 0.18, scale: 0.78 },
+  flame: { y: 0.16, scale: 0.76 },
+  medal: { y: -0.2, scale: 0.74 },
+  acorn: { y: -0.06, scale: 0.88 },
+  jellyfish: { y: -0.24, scale: 0.7 },
+  clover: { y: 0, scale: 0.72 },
 };
 
 const SHAPE_POINTS: Record<BlobShape, Point[]> = {
