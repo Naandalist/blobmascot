@@ -1,6 +1,8 @@
+import { useState } from "react";
 import {
   BlobMascot,
   EXPRESSIONS,
+  PALETTE,
   PLAYGROUND_STATES,
   SHAPES,
   useBlobMascot,
@@ -9,6 +11,7 @@ import {
 import { MiniBlob } from "./MiniBlob";
 
 export function App() {
+  const [followCursor, setFollowCursor] = useState(true);
   const mascot = useBlobMascot({
     shape: "circle",
     expression: "surprised",
@@ -29,7 +32,7 @@ export function App() {
   return (
     <div className="app">
       <section className="stage">
-        <BlobMascot controller={mascot} size={420} />
+        <BlobMascot controller={mascot} size={420} followCursor={followCursor} />
         <button className="export" type="button" onClick={downloadPng}>
           Export as PNG
         </button>
@@ -80,6 +83,37 @@ export function App() {
             </button>
           ))}
         </div>
+
+        <h2>Colour</h2>
+        <div className="swatches">
+          {PALETTE.map((color) => (
+            <button
+              key={color}
+              type="button"
+              className={mascot.snapshot.color.toLowerCase() === color.toLowerCase() ? "swatch on" : "swatch"}
+              style={{ background: color }}
+              aria-label={color}
+              onClick={() => mascot.setColor(color)}
+            />
+          ))}
+        </div>
+
+        <div className="toggle-row">
+          <span>Follow Cursor</span>
+          <button
+            type="button"
+            className={followCursor ? "switch on" : "switch"}
+            aria-pressed={followCursor}
+            onClick={() => setFollowCursor((value) => !value)}
+          >
+            <span />
+          </button>
+        </div>
+
+        <h2>About</h2>
+        <a className="about" href="https://github.com/Naandalist/blobmascot">
+          View the project on GitHub
+        </a>
       </aside>
     </div>
   );

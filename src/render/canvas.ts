@@ -119,10 +119,32 @@ export function drawFrame(
   const eyeY = cy + frame.face.y * radius + gazeY;
   const spread = frame.face.spread * radius;
   const eyeW = Math.max(1.2, frame.face.width * radius);
-  const eyeH = Math.max(1.2, frame.face.height * radius);
+  const canBlink = frame.face.kind < 0.55 && frame.state !== "sleep";
+  const wink = frame.state === "wink" ? 1 : 0;
+  const leftBlink = canBlink ? Math.max(frame.blink, wink) : 0;
+  const rightBlink = canBlink ? frame.blink : 0;
+  const leftH = Math.max(1.2, frame.face.height * radius * (1 - leftBlink * 0.92));
+  const rightH = Math.max(1.2, frame.face.height * radius * (1 - rightBlink * 0.92));
 
-  drawEye(ctx, cx - spread + gazeX, eyeY, eyeW, eyeH, -frame.face.rotate, frame.face.kind);
-  drawEye(ctx, cx + spread + gazeX, eyeY, eyeW, eyeH, frame.face.rotate, frame.face.kind);
+  drawEye(ctx, cx - spread + gazeX, eyeY, eyeW, leftH, -frame.face.rotate, frame.face.kind);
+  drawEye(ctx, cx + spread + gazeX, eyeY, eyeW, rightH, frame.face.rotate, frame.face.kind);
+
+  if (frame.state === "notify" || frame.state === "orbit" || frame.state === "swirl") {
+    const angle = time * (frame.state === "notify" ? 2.2 : 1.6);
+    const ring = radius * 0.96;
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(angle) * ring, cy + Math.sin(angle) * ring, radius * 0.14, 0, Math.PI * 2);
+    ctx.fillStyle = "#fff";
+    ctx.fill();
+  }
+
+  if (frame.state === "burst") {
+    ctx.strokeStyle = "rgba(255,255,255,0.7)";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius * (1.08 + (time % 0.6) * 0.35), 0, Math.PI * 2);
+    ctx.stroke();
+  }
 
   ctx.restore();
 }
